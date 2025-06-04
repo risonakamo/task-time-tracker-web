@@ -1,0 +1,26 @@
+{
+  "name": "task-time-tracker-web",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "b": "vite build -w false",
+    "w": "vite build -w true",
+    "check": "svelte-check --tsconfig tsconfig-svelte-check.json --threshold error"
+  },
+  "packageManager": "pnpm@10.8.1",
+  "dependencies": {
+    "@tsconfig/svelte": "^5.0.4",
+    "@types/lodash": "^4.17.17",
+    "axios": "^1.9.0",
+    "lodash": "^4.17.21",
+    "rollup": "^4.41.1",
+    "sass": "^1.89.1",
+    "svelte": "^5.33.14",
+    "svelte-check": "^4.2.1",
+    "svelte-preprocess": "^6.0.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-checker": "^0.9.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
