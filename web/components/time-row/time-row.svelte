@@ -1,5 +1,11 @@
 <script lang="ts">
+import {durationFormat, toTimeOnly} from "@/utils/date-conv";
 
+var {
+    timeEntry,
+}:{
+    timeEntry:TimeEntry
+}=$props();
 </script>
 
 <style lang="sass">
@@ -16,15 +22,15 @@
     </div>
 
     <div class="title">
-        2b details
+        {timeEntry.name}
     </div>
 
     <div class="time-range">
-        23:23 - 23:39
+        {toTimeOnly(timeEntry.timeStart)} - {toTimeOnly(timeEntry.timeEnd)}
     </div>
 
     <div class="duration">
-        00:15:06
+        {durationFormat(timeEntry.duration)}
     </div>
 
     <div class="buttons">
