@@ -1,4 +1,5 @@
 <script lang="ts">
+import TimeRow from "@/components/time-row/time-row.svelte";
 
 </script>
 
@@ -42,59 +43,9 @@
             </div>
         </div>
 
-        <div class="time-row">
-            <div class="selection">
-                <input type="checkbox"/>
-            </div>
-
-            <div class="sub-rows">
-                1
-            </div>
-
-            <div class="title">
-                2b details
-            </div>
-
-            <div class="time-range">
-                23:23 - 23:39
-            </div>
-
-            <div class="duration">
-                00:15:06
-            </div>
-
-            <div class="buttons">
-                <button>▶</button>
-                <button>🗑</button>
-            </div>
-        </div>
-
-        <div class="time-row">
-            <div class="selection">
-                <input type="checkbox"/>
-            </div>
-
-            <div class="sub-rows">
-                1
-            </div>
-
-            <div class="title">
-                2b details
-            </div>
-
-            <div class="time-range">
-                23:23 - 23:39
-            </div>
-
-            <div class="duration">
-                00:15:06
-            </div>
-
-            <div class="buttons">
-                <button>▶</button>
-                <button>🗑</button>
-            </div>
-        </div>
+        <TimeRow/>
+        <TimeRow/>
+        <TimeRow/>
 
         <div class="day-header">
             <div class="title">
@@ -106,31 +57,6 @@
             </div>
         </div>
 
-        <div class="time-row">
-            <div class="selection">
-                <input type="checkbox"/>
-            </div>
-
-            <div class="sub-rows">
-                1
-            </div>
-
-            <div class="title">
-                2a something
-            </div>
-
-            <div class="time-range">
-                23:23 - 23:39
-            </div>
-
-            <div class="duration">
-                00:15:06
-            </div>
-
-            <div class="buttons">
-                <button>▶</button>
-                <button>🗑</button>
-            </div>
-        </div>
+        <TimeRow/>
     </div>
 </div>
