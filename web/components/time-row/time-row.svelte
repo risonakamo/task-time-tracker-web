@@ -22,11 +22,15 @@ var {
     </div>
 
     <div class="title">
-        {timeEntry.name}
+        <input type="text" bind:value={timeEntry.name} class="hover-fade-input"/>
     </div>
 
     <div class="time-range">
-        {toTimeOnly(timeEntry.timeStart)} - {toTimeOnly(timeEntry.timeEnd)}
+        <input type="text" value={toTimeOnly(timeEntry.timeStart)}
+            class="hover-fade-input"/>
+        -
+        <input type="text" value={toTimeOnly(timeEntry.timeEnd)}
+            class="hover-fade-input"/>
     </div>
 
     <div class="duration">

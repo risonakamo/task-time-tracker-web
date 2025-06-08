@@ -2,8 +2,20 @@
     display: flex
     align-items: center
 
+    input.hover-fade-input
+        box-sizing: border-box
+        border-color: transparent
+        border: 1px solid transparent
+        border-radius: 2px
+
+        &:hover
+            border-color: #b69e9e
     .title
         flex: 1
+        padding-right: 8px
+
+        input
+            width: 100%
 
     .sub-rows
         width: 33px
@@ -13,6 +25,9 @@
 
     .time-range
         width: 110px
+
+        input
+            width: 47px
 
     .duration
         width: 80px
