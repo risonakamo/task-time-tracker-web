@@ -1,10 +1,12 @@
 <script lang="ts">
-import {durationFormat, toTimeOnly} from "@/utils/date-conv";
+import {durationFormat, toDateTime, toTimeOnly} from "@/utils/date-conv";
 
 var {
     timeEntry,
+    isSubEntry=false,
 }:{
     timeEntry:TimeEntry
+    isSubEntry?:boolean
 }=$props();
 </script>
 
@@ -12,13 +14,13 @@ var {
     @use "./time-row.sass"
 </style>
 
-<div class="time-row">
+<div class="time-row" class:sub-entry={isSubEntry}>
     <div class="selection">
         <input type="checkbox"/>
     </div>
 
     <div class="sub-rows">
-        1
+        <a href="javascript:;">▸1</a>
     </div>
 
     <div class="title">
@@ -27,10 +29,10 @@ var {
 
     <div class="time-range">
         <input type="text" value={toTimeOnly(timeEntry.timeStart)}
-            class="hover-fade-input"/>
+            class="hover-fade-input" title={toDateTime(timeEntry.timeStart)}/>
         -
         <input type="text" value={toTimeOnly(timeEntry.timeEnd)}
-            class="hover-fade-input"/>
+            class="hover-fade-input" title={toDateTime(timeEntry.timeEnd)}/>
     </div>
 
     <div class="duration">
