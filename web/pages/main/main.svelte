@@ -3,6 +3,7 @@ import {onMount} from "svelte";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask} from "@/lib/ttt-api";
+import {durationFormat} from "@/utils/date-conv";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -20,13 +21,41 @@ var tttState:TTTState=$state({
 /** the new task input field */
 var newTaskTitleField:string=$state("");
 
+/** text of the current running task */
+var currentTaskText:string=$derived.by(()=>{
+    if (tttState.currentTaskValid)
+    {
+        return tttState.currentTask.title;
+    }
+
+    return "None";
+});
+
+/** text showing the duration of the current task */
+var currentTaskTimer:string=$state("00:00:00");
+
 // on load, get the ttt state.
+// also, deploy the current task timer interval
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
 
         console.log("got state",tttState);
     })();
+
+    setInterval(()=>{
+        if (!tttState.currentTaskValid)
+        {
+            currentTaskTimer="00:00:00";
+            return;
+        }
+
+        const nowUnix:number=new Date().getTime()/1000;
+
+        currentTaskTimer=durationFormat(
+            nowUnix-tttState.currentTask.timeStart,
+        );
+    },1000);
 });
 
 /** clicked start button. send start task request with the contents of the task field,
@@ -70,10 +99,10 @@ async function onClickStart():Promise<void>
     </div>
 
     <div class="task-timer">
-        <p>current task: <span class="task-text">Doing Something</span></p>
+        <p>current task: <span class="task-text">{currentTaskText}</span></p>
 
         <div class="timer">
-            <h3>00:15:13</h3>
+            <h3>{currentTaskTimer}</h3>
             <button class="stop-button">Stop</button>
         </div>
     </div>
