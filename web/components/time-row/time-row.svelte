@@ -24,7 +24,7 @@ var {
     </div>
 
     <div class="title">
-        <input type="text" bind:value={timeEntry.name} class="hover-fade-input"/>
+        <input type="text" bind:value={timeEntry.title} class="hover-fade-input"/>
     </div>
 
     <div class="time-range">

@@ -4,7 +4,7 @@
 interface TimeEntry
 {
     id:string
-    name:string
+    title:string
 
     timeStart:number // unixtime seconds
     timeEnd:number // unixtime seconds
