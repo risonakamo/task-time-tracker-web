@@ -9,7 +9,7 @@ interface StartTaskReq
 /** ttt state */
 interface TTTState
 {
-    currentTaskValid:string
+    currentTaskValid:boolean
     currentTask:TimeEntry
     allTasks:TimeEntry[]
 }

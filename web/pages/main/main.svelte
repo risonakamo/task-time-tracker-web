@@ -1,67 +1,50 @@
 <script lang="ts">
+import {onMount} from "svelte";
+
 import TimeRow from "@/components/time-row/time-row.svelte";
+import {getState, startTask} from "@/lib/ttt-api";
 
-const timeRowData1: TimeEntry[] = [
-  {
-    id: "a1b2c",
-    title: "Design UI",
-    timeStart: 1717801200, // 2024-06-07 09:00:00 UTC
-    timeEnd: 1717804800,   // 2024-06-07 10:00:00 UTC
-    duration: 3600,
-  },
-  {
-    id: "d3e4f",
-    title: "Code Backend",
-    timeStart: 1717808400, // 2024-06-07 11:00:00 UTC
-    timeEnd: 1717812000,   // 2024-06-07 12:00:00 UTC
-    duration: 3600,
-  },
-  {
-    id: "g5h6i",
-    title: "Design UI",
-    timeStart: 1717815600, // 2024-06-07 13:00:00 UTC
-    timeEnd: 1717817400,   // 2024-06-07 13:30:00 UTC
-    duration: 1800,
-  },
-  {
-    id: "j7k8l",
-    title: "Meeting",
-    timeStart: 1717818000, // 2024-06-07 13:40:00 UTC
-    timeEnd: 1717821600,   // 2024-06-07 14:40:00 UTC
-    duration: 3600,
-  },
-  {
-    id: "m9n0o",
-    title: "Code Backend",
-    timeStart: 1717822200, // 2024-06-07 14:50:00 UTC
-    timeEnd: 1717824000,   // 2024-06-07 15:20:00 UTC
-    duration: 1800,
-  }
-];
+/** the main backend state */
+var tttState:TTTState=$state({
+    currentTaskValid:false,
+    currentTask:{
+        id:"",
+        title:"",
+        timeStart:-1,
+        timeEnd:-1,
+        duration:-1,
+    },
+    allTasks:[],
+});
 
-const timeRowData2: TimeEntry[] = [
-  {
-    id: "p1q2r",
-    title: "Write Docs",
-    timeStart: 1717887600, // 2024-06-08 09:00:00 UTC
-    timeEnd: 1717891200,   // 2024-06-08 10:00:00 UTC
-    duration: 3600,
-  },
-  {
-    id: "s3t4u",
-    title: "Team Review",
-    timeStart: 1717894800, // 2024-06-08 11:00:00 UTC
-    timeEnd: 1717898400,   // 2024-06-08 12:00:00 UTC
-    duration: 3600,
-  },
-  {
-    id: "v5w6x",
-    title: "Code Backend",
-    timeStart: 1717902000, // 2024-06-08 13:00:00 UTC
-    timeEnd: 1717904700,   // 2024-06-08 13:45:00 UTC
-    duration: 2700,
-  }
-];
+/** the new task input field */
+var newTaskTitleField:string=$state("");
+
+// on load, get the ttt state.
+onMount(()=>{
+    (async ()=>{
+        tttState=await getState();
+
+        console.log("got state",tttState);
+    })();
+});
+
+/** clicked start button. send start task request with the contents of the task field,
+ *  after cleaning it. doesn't work if empty. clears the task entry field afterward */
+async function onClickStart():Promise<void>
+{
+    var newTaskTitle:string=newTaskTitleField.trim();
+
+    if (newTaskTitle.length==0)
+    {
+        return;
+    }
+
+    tttState=await startTask(newTaskTitle);
+    console.log("new state",tttState);
+
+    newTaskTitleField="";
+}
 
 </script>
 
@@ -72,7 +55,8 @@ const timeRowData2: TimeEntry[] = [
 <div class="container">
     <div class="task-adder">
         <p>Start New Task</p>
-        <input type="text" list="task-auto-complete" class="task-input"/>
+        <input type="text" list="task-auto-complete" class="task-input"
+            placeholder="New Task" bind:value={newTaskTitleField}/>
 
         <datalist id="task-auto-complete">
             <option value="Email follow-up"></option>
@@ -82,7 +66,7 @@ const timeRowData2: TimeEntry[] = [
             <option value="Design mockups"></option>
         </datalist>
 
-        <button class="start-button">Start</button>
+        <button class="start-button" onclick={onClickStart}>Start</button>
     </div>
 
     <div class="task-timer">
@@ -95,7 +79,13 @@ const timeRowData2: TimeEntry[] = [
     </div>
 
     <div class="time-table">
-        <div class="day-header">
+        {#each tttState.allTasks as task (task.id)}
+            {#if task.timeEnd>0}
+                <TimeRow timeEntry={task}/>
+            {/if}
+        {/each}
+
+        <!-- <div class="day-header">
             <div class="title">
                 Sat, Jun 5 (Today)
             </div>
@@ -121,6 +111,6 @@ const timeRowData2: TimeEntry[] = [
 
         {#each timeRowData2 as timedata (timedata.id)}
             <TimeRow timeEntry={timedata}/>
-        {/each}
+        {/each} -->
     </div>
 </div>
