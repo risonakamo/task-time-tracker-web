@@ -4,13 +4,20 @@ import {durationFormat, toDateTime, toTimeOnly} from "@/utils/date-conv";
 var {
     timeEntry,
     isSubEntry=false,
+    selected,
+
     onPlay,
+    onSelect,
 }:{
     timeEntry:TimeEntry
     isSubEntry?:boolean
+    selected:boolean
 
     // clicked play button. passes up the time entry that was just clicked
     onPlay(timeEntry:TimeEntry):void
+
+    // toggled select state. gives new desired select state
+    onSelect(timeEntry:TimeEntry,newSelectState:boolean):void
 }=$props();
 
 var timeEndTextShort:string=$derived.by(()=>{
@@ -47,6 +54,12 @@ function onPlayClick():void
 {
     onPlay(timeEntry);
 }
+
+/** clicked checkbox. trigger on select with opposite of current value */
+function onSelectClick():void
+{
+    onSelect(timeEntry,!selected);
+}
 </script>
 
 <style lang="sass">
@@ -55,7 +68,7 @@ function onPlayClick():void
 
 <div class="time-row" class:sub-entry={isSubEntry} class:active={isOngoing}>
     <div class="selection">
-        <input type="checkbox"/>
+        <input type="checkbox" checked={selected} onchange={onSelectClick}/>
     </div>
 
     <div class="sub-rows">

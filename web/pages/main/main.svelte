@@ -1,6 +1,7 @@
 <script lang="ts">
 import {onMount} from "svelte";
 import _ from "lodash";
+import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask, stopTask} from "@/lib/ttt-api";
@@ -35,6 +36,9 @@ var currentTaskText:string=$derived.by(()=>{
     return "None";
 });
 
+/** ids of selected tasks */
+var selectedEntrys:Set<string>=new SvelteSet();
+
 /** list of unique task names */
 var uniqueTaskNames:string[]=$derived.by(()=>{
     return _(tttState.allTasks)
@@ -43,6 +47,20 @@ var uniqueTaskNames:string[]=$derived.by(()=>{
         })
         .uniq()
         .value();
+});
+
+var totalSelectedTimeText:string=$derived.by(()=>{
+    // sum duration of all entrys that are selected and are not in progress
+    const selectedTimeNum:number=_.sumBy(tttState.allTasks,(task:TimeEntry):number=>{
+        if (!selectedEntrys.has(task.id) || task.duration<0)
+        {
+            return 0;
+        }
+
+        return task.duration;
+    });
+
+    return durationFormat(selectedTimeNum);
 });
 
 // on load, get the ttt state.
@@ -109,6 +127,26 @@ async function onStopClick():Promise<void>
 {
     tttState=await stopTask();
 }
+
+/** time entry changed select state. update the selected entrys state */
+function onEntrySelectChange(task:TimeEntry,newSelect:boolean):void
+{
+    if (newSelect)
+    {
+        selectedEntrys.add(task.id);
+    }
+
+    else
+    {
+        selectedEntrys.delete(task.id);
+    }
+}
+
+/** clicked clear selections button */
+function onClearSelectionsClick():void
+{
+    selectedEntrys.clear();
+}
 </script>
 
 <style lang="sass">
@@ -145,12 +183,18 @@ async function onStopClick():Promise<void>
             </div>
         </div>
     </div>
+
+    <div class="selection-info">
+        <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>
+        <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
+    </div>
 </div>
 
 <div class="time-table">
     <div class="inner">
         {#each tttState.allTasks as task (task.id)}
-            <TimeRow timeEntry={task} onPlay={onEntryPlayClick}/>
+            <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
+                selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}/>
         {/each}
 
         <!-- <div class="day-header">
