@@ -13,6 +13,35 @@ var {
     onPlay(timeEntry:TimeEntry):void
 }=$props();
 
+var timeEndTextShort:string=$derived.by(()=>{
+    if (timeEntry.timeEnd<0)
+    {
+        return "...";
+    }
+
+    return toTimeOnly(timeEntry.timeEnd);
+});
+
+var timeEndTextLong:string=$derived.by(()=>{
+    if (timeEntry.timeEnd<0)
+    {
+        return "...";
+    }
+
+    return toDateTime(timeEntry.timeEnd);
+});
+
+var durationText:string=$derived.by(()=>{
+    if (timeEntry.duration<0)
+    {
+        return "...";
+    }
+
+    return durationFormat(timeEntry.duration);
+});
+
+var isOngoing:boolean=$derived(timeEntry.duration<0);
+
 /** clicked play button. call play click event */
 function onPlayClick():void
 {
@@ -24,7 +53,7 @@ function onPlayClick():void
     @use "./time-row.sass"
 </style>
 
-<div class="time-row" class:sub-entry={isSubEntry}>
+<div class="time-row" class:sub-entry={isSubEntry} class:active={isOngoing}>
     <div class="selection">
         <input type="checkbox"/>
     </div>
@@ -41,12 +70,12 @@ function onPlayClick():void
         <input type="text" value={toTimeOnly(timeEntry.timeStart)}
             class="hover-fade-input" title={toDateTime(timeEntry.timeStart)}/>
         -
-        <input type="text" value={toTimeOnly(timeEntry.timeEnd)}
-            class="hover-fade-input" title={toDateTime(timeEntry.timeEnd)}/>
+        <input type="text" value={timeEndTextShort}
+            class="hover-fade-input" title={timeEndTextLong}/>
     </div>
 
     <div class="duration">
-        {durationFormat(timeEntry.duration)}
+        {durationText}
     </div>
 
     <div class="buttons">
