@@ -4,10 +4,20 @@ import {durationFormat, toDateTime, toTimeOnly} from "@/utils/date-conv";
 var {
     timeEntry,
     isSubEntry=false,
+    onPlay,
 }:{
     timeEntry:TimeEntry
     isSubEntry?:boolean
+
+    // clicked play button. passes up the time entry that was just clicked
+    onPlay(timeEntry:TimeEntry):void
 }=$props();
+
+/** clicked play button. call play click event */
+function onPlayClick():void
+{
+    onPlay(timeEntry);
+}
 </script>
 
 <style lang="sass">
@@ -40,7 +50,7 @@ var {
     </div>
 
     <div class="buttons">
-        <button>▶</button>
+        <button onclick={onPlayClick}>▶</button>
         <button>🗑</button>
     </div>
 </div>

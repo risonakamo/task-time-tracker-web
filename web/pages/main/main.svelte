@@ -58,11 +58,10 @@ onMount(()=>{
     },1000);
 });
 
-/** clicked start button. send start task request with the contents of the task field,
- *  after cleaning it. doesn't work if empty. clears the task entry field afterward */
-async function onClickStart():Promise<void>
+/** start a task. sets the state, and clears the new task title field */
+async function startTask2(title:string):Promise<void>
 {
-    var newTaskTitle:string=newTaskTitleField.trim();
+    var newTaskTitle:string=title.trim();
 
     if (newTaskTitle.length==0)
     {
@@ -75,6 +74,18 @@ async function onClickStart():Promise<void>
     newTaskTitleField="";
 }
 
+/** clicked start button. send start task request with the contents of the task field,
+ *  after cleaning it. doesn't work if empty. clears the task entry field afterward */
+function onClickStart():void
+{
+    startTask2(newTaskTitleField)
+}
+
+/** clicked on an entry's play button. start task with that entry's title */
+function onEntryPlayClick(task:TimeEntry):void
+{
+    startTask2(task.title);
+}
 </script>
 
 <style lang="sass">
@@ -109,9 +120,7 @@ async function onClickStart():Promise<void>
 
     <div class="time-table">
         {#each tttState.allTasks as task (task.id)}
-            {#if task.timeEnd>0}
-                <TimeRow timeEntry={task}/>
-            {/if}
+            <TimeRow timeEntry={task} onPlay={onEntryPlayClick}/>
         {/each}
 
         <!-- <div class="day-header">
