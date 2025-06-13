@@ -3,7 +3,7 @@ import {onMount} from "svelte";
 import _ from "lodash";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
-import {getState, startTask} from "@/lib/ttt-api";
+import {getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat} from "@/utils/date-conv";
 
 /** the main backend state */
@@ -103,6 +103,12 @@ function onTitleInputKey(e:KeyboardEvent):void
         onClickStart();
     }
 }
+
+/** clicked stop task. send stop task request. update state */
+async function onStopClick():Promise<void>
+{
+    tttState=await stopTask();
+}
 </script>
 
 <style lang="sass">
@@ -131,7 +137,11 @@ function onTitleInputKey(e:KeyboardEvent):void
         <div class="right">
             <div class="timer">
                 <h3>{currentTaskTimer}</h3>
-                <button class="stop-button">Stop</button>
+                <button class="stop-button" onclick={onStopClick}
+                    disabled={!tttState.currentTaskValid}
+                >
+                    Stop
+                </button>
             </div>
         </div>
     </div>
