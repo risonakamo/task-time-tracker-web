@@ -1,5 +1,6 @@
 <script lang="ts">
 import {onMount} from "svelte";
+import _ from "lodash";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask} from "@/lib/ttt-api";
@@ -21,6 +22,9 @@ var tttState:TTTState=$state({
 /** the new task input field */
 var newTaskTitleField:string=$state("");
 
+/** text showing the duration of the current task */
+var currentTaskTimer:string=$state("00:00:00");
+
 /** text of the current running task */
 var currentTaskText:string=$derived.by(()=>{
     if (tttState.currentTaskValid)
@@ -31,8 +35,15 @@ var currentTaskText:string=$derived.by(()=>{
     return "None";
 });
 
-/** text showing the duration of the current task */
-var currentTaskTimer:string=$state("00:00:00");
+/** list of unique task names */
+var uniqueTaskNames:string[]=$derived.by(()=>{
+    return _(tttState.allTasks)
+        .map((task:TimeEntry):string=>{
+            return task.title;
+        })
+        .uniq()
+        .value();
+});
 
 // on load, get the ttt state.
 // also, deploy the current task timer interval
@@ -99,11 +110,9 @@ function onEntryPlayClick(task:TimeEntry):void
             placeholder="New Task" bind:value={newTaskTitleField}/>
 
         <datalist id="task-auto-complete">
-            <option value="Email follow-up"></option>
-            <option value="Code review"></option>
-            <option value="Sprint planning"></option>
-            <option value="Bug fixing"></option>
-            <option value="Design mockups"></option>
+            {#each uniqueTaskNames as taskName (taskName)}
+                <option value={taskName}></option>
+            {/each}
         </datalist>
 
         <button class="start-button" onclick={onClickStart}>Start</button>
