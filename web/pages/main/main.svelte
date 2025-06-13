@@ -103,9 +103,8 @@ function onEntryPlayClick(task:TimeEntry):void
     @use "./main.sass"
 </style>
 
-<div class="container">
+<div class="controls">
     <div class="task-adder">
-        <p>Start New Task</p>
         <input type="text" list="task-auto-complete" class="task-input"
             placeholder="New Task" bind:value={newTaskTitleField}/>
 
@@ -119,15 +118,21 @@ function onEntryPlayClick(task:TimeEntry):void
     </div>
 
     <div class="task-timer">
-        <p>current task: <span class="task-text">{currentTaskText}</span></p>
+        <div class="left">
+            <p>current task: <span class="task-text">{currentTaskText}</span></p>
+        </div>
 
-        <div class="timer">
-            <h3>{currentTaskTimer}</h3>
-            <button class="stop-button">Stop</button>
+        <div class="right">
+            <div class="timer">
+                <h3>{currentTaskTimer}</h3>
+                <button class="stop-button">Stop</button>
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="time-table">
+<div class="time-table">
+    <div class="inner">
         {#each tttState.allTasks as task (task.id)}
             <TimeRow timeEntry={task} onPlay={onEntryPlayClick}/>
         {/each}

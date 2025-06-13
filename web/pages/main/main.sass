@@ -1,30 +1,62 @@
-.container
-    max-width: 40%
-    margin: auto
+:global(body,html)
+    margin: 0
+    height: 100%
+    width: 100%
+    display: flex
+    flex-direction: column
+    overflow: hidden
 
-.task-timer
-    .task-text
-        font-weight: 600
+:global(body)
+    padding-bottom: 10px
 
-    h3
-        font-size: 30px
-        margin: 15px 0
-        display: inline-block
+.controls
+    padding: 18px
+    display: flex
+    align-items: center
+    flex-direction: column
 
-    .stop-button
-        font-size: 20px
-        padding: 14px 40px
-        display: inline-block
+    & > div
+        width: 43%
 
-.task-adder
-    .task-input
-        font-size: 18px
+    .task-timer
+        display: flex
 
-    .start-button
-        font-size: 18px
-        width: 90px
+        .left
+            flex: 1
+
+        .task-text
+            font-weight: 600
+
+        h3
+            font-size: 30px
+            margin: 15px 0
+            display: inline-block
+
+        .stop-button
+            font-size: 20px
+            padding: 3px 23px
+            display: inline-block
+
+    .task-adder
+        display: flex
+
+        .task-input
+            flex: 1
+            margin-right: 14px
+            font-size: 18px
+
+        .start-button
+            font-size: 18px
+            width: 90px
 
 .time-table
+    overflow: auto
+    display: flex
+    justify-content: center
+
+    .inner
+        width: 55%
+
     .day-header
         display: flex
         margin-top: 13px
