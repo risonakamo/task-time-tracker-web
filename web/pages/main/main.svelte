@@ -50,8 +50,6 @@ var uniqueTaskNames:string[]=$derived.by(()=>{
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
-
-        console.log("got state",tttState);
     })();
 
     setInterval(()=>{
@@ -80,7 +78,6 @@ async function startTask2(title:string):Promise<void>
     }
 
     tttState=await startTask(newTaskTitle);
-    console.log("new state",tttState);
 
     newTaskTitleField="";
 }
@@ -97,6 +94,15 @@ function onEntryPlayClick(task:TimeEntry):void
 {
     startTask2(task.title);
 }
+
+/** title input keypress. if enter, do same thing as pressing start button */
+function onTitleInputKey(e:KeyboardEvent):void
+{
+    if (e.key=="Enter")
+    {
+        onClickStart();
+    }
+}
 </script>
 
 <style lang="sass">
@@ -106,7 +112,7 @@ function onEntryPlayClick(task:TimeEntry):void
 <div class="controls">
     <div class="task-adder">
         <input type="text" list="task-auto-complete" class="task-input"
-            placeholder="New Task" bind:value={newTaskTitleField}/>
+            placeholder="New Task" bind:value={newTaskTitleField} onkeydown={onTitleInputKey}/>
 
         <datalist id="task-auto-complete">
             {#each uniqueTaskNames as taskName (taskName)}
