@@ -19,6 +19,7 @@ interface TTTState
 interface DayContainer
 {
     dateKey:string // 2023/01/05
+    date:number // unix seconds
     entries:TimeEntry[]
     totalDuration:number // seconds
 }

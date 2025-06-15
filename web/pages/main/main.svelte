@@ -5,7 +5,7 @@ import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask, stopTask} from "@/lib/ttt-api";
-import {durationFormat} from "@/utils/date-conv";
+import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -69,6 +69,7 @@ var totalSelectedTimeText:string=$derived.by(()=>{
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
+        console.log(tttState);
     })();
 
     setInterval(()=>{
@@ -196,9 +197,9 @@ function onClearSelectionsClick():void
         {#each tttState.dayContainers as dayContainer (dayContainer.dateKey)}
             <div class="day-box">
                 <div class="day-header">
-                    <div class="title">
+                    <div class="title" title={toDateTime(dayContainer.date)}>
                         <!-- Sat, Jun 5 (Today) -->
-                        {dayContainer.dateKey}
+                        {toWordDate(dayContainer.date)}
                     </div>
 
                     <div class="duration">

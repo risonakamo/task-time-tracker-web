@@ -30,3 +30,17 @@ export function toDateTime(unixSeconds: number): string
 
     return `${year}/${month}/${day} ${hours}:${minutes}`;
 }
+
+/** convert unix seconds to "Sat, Jun 3" */
+export function toWordDate(unixSeconds:number):string
+{
+    const date = new Date(unixSeconds * 1000);
+
+    const formatted = date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+    });
+
+    return formatted;
+}
