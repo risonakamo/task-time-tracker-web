@@ -18,6 +18,7 @@ var tttState:TTTState=$state({
         duration:-1,
     },
     allTasks:[],
+    dayContainers:[],
 });
 
 /** the new task input field */
@@ -192,37 +193,26 @@ function onClearSelectionsClick():void
 
 <div class="time-table">
     <div class="inner">
-        {#each tttState.allTasks as task (task.id)}
-            <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
-                selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}/>
+        {#each tttState.dayContainers as dayContainer (dayContainer.dateKey)}
+            <div class="day-box">
+                <div class="day-header">
+                    <div class="title">
+                        <!-- Sat, Jun 5 (Today) -->
+                        {dayContainer.dateKey}
+                    </div>
+
+                    <div class="duration">
+                        {durationFormat(dayContainer.totalDuration)}
+                    </div>
+                </div>
+
+                <div class="entries">
+                    {#each dayContainer.entries as task (task.id)}
+                        <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
+                            selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}/>
+                    {/each}
+                </div>
+            </div>
         {/each}
-
-        <!-- <div class="day-header">
-            <div class="title">
-                Sat, Jun 5 (Today)
-            </div>
-
-            <div class="duration">
-                02:04:19
-            </div>
-        </div>
-
-        {#each timeRowData1 as timedata (timedata.id)}
-            <TimeRow timeEntry={timedata}/>
-        {/each}
-
-        <div class="day-header">
-            <div class="title">
-                Friday, Jun 4 (Yesterday)
-            </div>
-
-            <div class="duration">
-                01:19:12
-            </div>
-        </div>
-
-        {#each timeRowData2 as timedata (timedata.id)}
-            <TimeRow timeEntry={timedata}/>
-        {/each} -->
     </div>
 </div>

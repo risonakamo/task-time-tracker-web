@@ -12,4 +12,24 @@ interface TTTState
     currentTaskValid:boolean
     currentTask:TimeEntry
     allTasks:TimeEntry[]
+    dayContainers:DayContainer[]
+}
+
+/** container of time entries */
+interface DayContainer
+{
+    dateKey:string // 2023/01/05
+    entries:TimeEntry[]
+    totalDuration:number // seconds
+}
+
+/** a single time event entry */
+interface TimeEntry
+{
+    id:string
+    title:string
+
+    timeStart:number // unixtime seconds
+    timeEnd:number // unixtime seconds
+    duration:number // seconds
 }
