@@ -31,3 +31,9 @@ export async function stopTask():Promise<TTTState>
 {
     return (await ax.post("/stop-task")).data;
 }
+
+/** submit task to be edited */
+export async function editTask(task:TimeEntry):Promise<TTTState>
+{
+    return (await ax.post("/edit-task",task)).data;
+}
