@@ -64,6 +64,15 @@ var totalSelectedTimeText:string=$derived.by(()=>{
     return durationFormat(selectedTimeNum);
 });
 
+var documentTitle:string=$derived.by(()=>{
+    if (tttState.currentTaskValid)
+    {
+        return `▷ Task Time Tracker: ${tttState.currentTask.title}`;
+    }
+
+    return "⏹ Task Time Tracker";
+});
+
 // on load, get the ttt state.
 // also, deploy the current task timer interval
 onMount(()=>{
@@ -217,3 +226,7 @@ function onClearSelectionsClick():void
         {/each}
     </div>
 </div>
+
+<svelte:head>
+    <title>{documentTitle}</title>
+</svelte:head>
