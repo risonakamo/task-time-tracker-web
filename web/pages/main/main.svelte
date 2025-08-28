@@ -6,6 +6,7 @@ import {SvelteSet} from "svelte/reactivity";
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
+import {getTasksBetween} from "@/lib/ttt-state";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -117,6 +118,30 @@ async function startTask2(title:string):Promise<void>
     newTaskTitleField="";
 }
 
+/** do shift select with the given items, selecting or deselecting all in between
+ *  the 2 target tasks */
+function doShiftSelect(task1:TimeEntry,task2:TimeEntry,select:boolean):void
+{
+    const targetTasks:TimeEntry[]=getTasksBetween(
+        tttState.allTasks,
+        task1,
+        task2,
+    );
+
+    for (const task of targetTasks)
+    {
+        if (select)
+        {
+            selectedEntrys.add(task.id);
+        }
+
+        else
+        {
+            selectedEntrys.delete(task.id);
+        }
+    }
+}
+
 /** clicked start button. send start task request with the contents of the task field,
  *  after cleaning it. doesn't work if empty. clears the task entry field afterward */
 function onClickStart():void
@@ -145,9 +170,19 @@ async function onStopClick():Promise<void>
     tttState=await stopTask();
 }
 
-/** time entry changed select state. update the selected entrys state */
+/** time entry changed select state. update the selected entrys state.
+ *  if shift was held, do the shift select operation instead of the normal operation,
+ *  but only if there was a last selected item. shift select does not set the last
+ *  select item
+ */
 function onEntrySelectChange(task:TimeEntry,newSelect:boolean,shift:boolean):void
 {
+    if (shift && lastSelectedTask!=null)
+    {
+        doShiftSelect(lastSelectedTask,task,lastSelectedWasSelection);
+        return;
+    }
+
     lastSelectedTask=task;
     lastSelectedWasSelection=newSelect;
 
