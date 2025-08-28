@@ -17,7 +17,7 @@ var {
     onPlay(timeEntry:TimeEntry):void
 
     // toggled select state. gives new desired select state
-    onSelect(timeEntry:TimeEntry,newSelectState:boolean):void
+    onSelect(timeEntry:TimeEntry,newSelectState:boolean,shift:boolean):void
 }=$props();
 
 var timeEndTextShort:string=$derived.by(()=>{
@@ -56,9 +56,9 @@ function onPlayClick():void
 }
 
 /** clicked checkbox. trigger on select with opposite of current value */
-function onSelectClick():void
+function onSelectClick(e:MouseEvent):void
 {
-    onSelect(timeEntry,!selected);
+    onSelect(timeEntry,!selected,e.shiftKey);
 }
 </script>
 
@@ -68,7 +68,7 @@ function onSelectClick():void
 
 <div class="time-row" class:sub-entry={isSubEntry} class:active={isOngoing}>
     <div class="selection">
-        <input type="checkbox" checked={selected} onchange={onSelectClick}/>
+        <input type="checkbox" checked={selected} onclick={onSelectClick}/>
     </div>
 
     <div class="sub-rows">

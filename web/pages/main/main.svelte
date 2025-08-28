@@ -40,6 +40,13 @@ var currentTaskText:string=$derived.by(()=>{
 /** ids of selected tasks */
 var selectedEntrys:Set<string>=new SvelteSet();
 
+/** last task item that selection event occured on */
+var lastSelectedTask:TimeEntry|null=$state(null);
+
+/** if the last select operation was a select (true) or deselect (false).
+ *  only valid if last selected item is not null */
+var lastSelectedWasSelection:boolean=false;
+
 /** list of unique task names */
 var uniqueTaskNames:string[]=$derived.by(()=>{
     return _(tttState.allTasks)
@@ -78,7 +85,6 @@ var documentTitle:string=$derived.by(()=>{
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
-        console.log(tttState);
     })();
 
     setInterval(()=>{
@@ -140,8 +146,11 @@ async function onStopClick():Promise<void>
 }
 
 /** time entry changed select state. update the selected entrys state */
-function onEntrySelectChange(task:TimeEntry,newSelect:boolean):void
+function onEntrySelectChange(task:TimeEntry,newSelect:boolean,shift:boolean):void
 {
+    lastSelectedTask=task;
+    lastSelectedWasSelection=newSelect;
+
     if (newSelect)
     {
         selectedEntrys.add(task.id);
