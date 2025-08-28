@@ -84,10 +84,6 @@ function onSelectClick(e:MouseEvent):void
         <input type="checkbox" checked={selected} onclick={onSelectClick}/>
     </div>
 
-    <div class="sub-rows">
-        <a href="javascript:;">▸1</a>
-    </div>
-
     <div class="title">
         <input type="text" bind:value={timeEntry.title} class="hover-fade-input"/>
     </div>
