@@ -46,7 +46,7 @@ var lastSelectedTask:TimeEntry|null=$state(null);
 
 /** if the last select operation was a select (true) or deselect (false).
  *  only valid if last selected item is not null */
-var lastSelectedWasSelection:boolean=false;
+var lastSelectedWasSelection:boolean=$state(false);
 
 /** list of unique task names */
 var uniqueTaskNames:string[]=$derived.by(()=>{
@@ -140,6 +140,8 @@ function doShiftSelect(task1:TimeEntry,task2:TimeEntry,select:boolean):void
             selectedEntrys.delete(task.id);
         }
     }
+
+    selectedEntrys=selectedEntrys;
 }
 
 /** clicked start button. send start task request with the contents of the task field,
@@ -263,7 +265,8 @@ function onClearSelectionsClick():void
                 <div class="entries">
                     {#each dayContainer.entries as task (task.id)}
                         <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
-                            selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}/>
+                            selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}
+                            shiftSelectAction={lastSelectedWasSelection}/>
                     {/each}
                 </div>
             </div>

@@ -5,6 +5,7 @@ var {
     timeEntry,
     isSubEntry=false,
     selected,
+    shiftSelectAction,
 
     onPlay,
     onSelect,
@@ -12,6 +13,8 @@ var {
     timeEntry:TimeEntry
     isSubEntry?:boolean
     selected:boolean
+    // what should happen to this item on a shift select
+    shiftSelectAction:boolean
 
     // clicked play button. passes up the time entry that was just clicked
     onPlay(timeEntry:TimeEntry):void
@@ -58,6 +61,16 @@ function onPlayClick():void
 /** clicked checkbox. trigger on select with opposite of current value */
 function onSelectClick(e:MouseEvent):void
 {
+    // for some reason, clicking always toggles the checkbox and ignores the props value.
+    // when shift selecting, if the new selection is different to the shift select action,
+    // cancel the toggle, as if the toggle occurs, it will be different from the shift
+    // select action afterward. if the new selection is equal to the shift select action,
+    // allow the toggle, as it is about to happen to become the shift select action
+    if (e.shiftKey && !selected!=shiftSelectAction)
+    {
+        e.preventDefault();
+    }
+
     onSelect(timeEntry,!selected,e.shiftKey);
 }
 </script>
