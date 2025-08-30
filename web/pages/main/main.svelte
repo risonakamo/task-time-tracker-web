@@ -4,9 +4,9 @@ import _ from "lodash";
 import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
-import {getState, startTask, stopTask} from "@/lib/ttt-api";
+import {editTasks2, getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
-import {getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
+import {createChangeRequest, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -237,6 +237,17 @@ function onRowTitleChange(task:TimeEntry,newTitle:string):void
 {
     taskTitles[task.id]=newTitle;
 }
+
+/** clicked apply edits. send in the edits, get new state back. override the state */
+async function onApplyEdits():Promise<void>
+{
+    const newState:TTTState=await editTasks2(
+        createChangeRequest(editedTaskTitles)
+    );
+
+    tttState=newState;
+    genTaskTitlesDict();
+}
 </script>
 
 <style lang="sass">
@@ -280,7 +291,9 @@ function onRowTitleChange(task:TimeEntry,newTitle:string):void
             <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
         {/if}
         {#if editedTitlesNum>0}
-            <a href="javascript:;">apply edits ({editedTitlesNum})</a>
+            <a href="javascript:;" onclick={onApplyEdits}>
+                apply edits ({editedTitlesNum})
+            </a>
         {/if}
     </div>
 </div>

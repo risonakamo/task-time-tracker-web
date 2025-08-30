@@ -55,3 +55,19 @@ export function getTitlesEdits(
         return false;
     });
 }
+
+/** convert various change data structs into time entry edits
+ *  for backend */
+export function createChangeRequest(
+    taskTitlesDict:TaskTitlesDict,
+):TimeEntryEdit[]
+{
+    return _.map(taskTitlesDict,(newTitle:string,id:string):TimeEntryEdit=>{
+        return {
+            id,
+            title:newTitle,
+            timeStart:-1,
+            timeEnd:-1,
+        };
+    });
+}
