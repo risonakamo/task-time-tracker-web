@@ -248,6 +248,12 @@ async function onApplyEdits():Promise<void>
     tttState=newState;
     genTaskTitlesDict();
 }
+
+/** clicked cancel edits. regen the title edits obj to match original state */
+function onCancelEdits():void
+{
+    genTaskTitlesDict();
+}
 </script>
 
 <style lang="sass">
@@ -293,6 +299,9 @@ async function onApplyEdits():Promise<void>
         {#if editedTitlesNum>0}
             <a href="javascript:;" onclick={onApplyEdits}>
                 apply edits ({editedTitlesNum})
+            </a>
+            <a href="javascript:;" onclick={onCancelEdits}>
+                cancel edits
             </a>
         {/if}
     </div>
