@@ -6,10 +6,7 @@ import {SvelteSet} from "svelte/reactivity";
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
-import {getTasksBetween} from "@/lib/ttt-state";
-
-/** container of task titles */
-type TaskTitlesDict=Record<string,string>
+import {getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -87,6 +84,15 @@ var documentTitle:string=$derived.by(()=>{
 
     return "⏹ Task Time Tracker";
 });
+
+/** task titles, but only the edited ones */
+var editedTaskTitles:TaskTitlesDict=$derived(getTitlesEdits(
+    tttState.allTasks,
+    taskTitles,
+));
+
+/** if there is at least 1 edited task title */
+var editedTitlesNum:number=$derived(Object.keys(editedTaskTitles).length);
 
 // on load, get the ttt state.
 // also, deploy the current task timer interval
@@ -270,7 +276,12 @@ function onRowTitleChange(task:TimeEntry,newTitle:string):void
 
     <div class="selection-info">
         <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>
-        <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
+        {#if selectedEntrys.size>0}
+            <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
+        {/if}
+        {#if editedTitlesNum>0}
+            <a href="javascript:;">apply edits ({editedTitlesNum})</a>
+        {/if}
     </div>
 </div>
 

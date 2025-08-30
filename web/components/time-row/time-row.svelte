@@ -58,6 +58,9 @@ var durationText:string=$derived.by(()=>{
 
 var isOngoing:boolean=$derived(timeEntry.duration<0);
 
+/** edited if the time entry (original title) doesn't match the 2nd title (editable) */
+var edited:boolean=$derived(timeEntry.title!=title);
+
 /** clicked play button. call play click event */
 function onPlayClick():void
 {
@@ -97,7 +100,8 @@ function onTitleChange2(e:Event):void
     </div>
 
     <div class="title">
-        <input type="text" value={title} class="hover-fade-input" onchange={onTitleChange2}/>
+        <input type="text" value={title} class="hover-fade-input" onchange={onTitleChange2}
+            class:edited={edited}/>
     </div>
 
     <div class="time-range">

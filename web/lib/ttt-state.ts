@@ -34,3 +34,24 @@ export function getTasksBetween(
 
     return allTasks.slice(startIndex,endIndex+1);
 }
+
+/** generate dict of rows that have edited titles */
+export function getTitlesEdits(
+    allTasks:TimeEntry[],
+    editedTitles:TaskTitlesDict,
+):TaskTitlesDict
+{
+    const keyedTasks:TaskDict=_.keyBy(allTasks,(task:TimeEntry):string=>{
+        return task.id;
+    });
+
+    // filter edited titles dict to only ones where it doesn't match the original
+    return _.pickBy(editedTitles,(title:string,id:string):boolean=>{
+        if (keyedTasks[id].title!=title)
+        {
+            return true;
+        }
+
+        return false;
+    });
+}
