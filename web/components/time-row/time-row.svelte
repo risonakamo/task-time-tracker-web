@@ -6,21 +6,27 @@ var {
     isSubEntry=false,
     selected,
     shiftSelectAction,
+    title,
 
     onPlay,
     onSelect,
+    onTitleChange,
 }:{
     timeEntry:TimeEntry
     isSubEntry?:boolean
     selected:boolean
     // what should happen to this item on a shift select
     shiftSelectAction:boolean
+    title:string
 
     // clicked play button. passes up the time entry that was just clicked
     onPlay(timeEntry:TimeEntry):void
 
     // toggled select state. gives new desired select state
     onSelect(timeEntry:TimeEntry,newSelectState:boolean,shift:boolean):void
+
+    // title changed
+    onTitleChange(timeEntry:TimeEntry,newTitle:string):void
 }=$props();
 
 var timeEndTextShort:string=$derived.by(()=>{
@@ -73,6 +79,12 @@ function onSelectClick(e:MouseEvent):void
 
     onSelect(timeEntry,!selected,e.shiftKey);
 }
+
+/** title input box changed. trigger event */
+function onTitleChange2(e:Event):void
+{
+    onTitleChange(timeEntry,(e.currentTarget as HTMLInputElement).value);
+}
 </script>
 
 <style lang="sass">
@@ -85,7 +97,7 @@ function onSelectClick(e:MouseEvent):void
     </div>
 
     <div class="title">
-        <input type="text" bind:value={timeEntry.title} class="hover-fade-input"/>
+        <input type="text" value={title} class="hover-fade-input" onchange={onTitleChange2}/>
     </div>
 
     <div class="time-range">

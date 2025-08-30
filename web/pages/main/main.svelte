@@ -8,6 +8,9 @@ import {getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
 import {getTasksBetween} from "@/lib/ttt-state";
 
+/** container of task titles */
+type TaskTitlesDict=Record<string,string>
+
 /** the main backend state */
 var tttState:TTTState=$state({
     currentTaskValid:false,
@@ -21,6 +24,10 @@ var tttState:TTTState=$state({
     allTasks:[],
     dayContainers:[],
 });
+
+/** contains the current task titles. key: id of a task. val: the value of the title.
+ *  set initially when data loaded, changed by user editing */
+var taskTitles:TaskTitlesDict=$state({});
 
 /** the new task input field */
 var newTaskTitleField:string=$state("");
@@ -39,7 +46,7 @@ var currentTaskText:string=$derived.by(()=>{
 });
 
 /** ids of selected tasks */
-var selectedEntrys:Set<string>=new SvelteSet();
+var selectedEntrys:Set<string>=$state(new SvelteSet());
 
 /** last task item that selection event occured on */
 var lastSelectedTask:TimeEntry|null=$state(null);
@@ -86,6 +93,7 @@ var documentTitle:string=$derived.by(()=>{
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
+        genTaskTitlesDict();
     })();
 
     setInterval(()=>{
@@ -142,6 +150,19 @@ function doShiftSelect(task1:TimeEntry,task2:TimeEntry,select:boolean):void
     }
 
     selectedEntrys=selectedEntrys;
+}
+
+/** create task titles dict from the current state */
+function genTaskTitlesDict():void
+{
+    const newDict:TaskTitlesDict={};
+
+    for (const task of tttState.allTasks)
+    {
+        newDict[task.id]=task.title;
+    }
+
+    taskTitles=newDict;
 }
 
 /** clicked start button. send start task request with the contents of the task field,
@@ -203,6 +224,12 @@ function onEntrySelectChange(task:TimeEntry,newSelect:boolean,shift:boolean):voi
 function onClearSelectionsClick():void
 {
     selectedEntrys.clear();
+}
+
+/** row title changed. update the dict */
+function onRowTitleChange(task:TimeEntry,newTitle:string):void
+{
+    taskTitles[task.id]=newTitle;
 }
 </script>
 
@@ -266,7 +293,8 @@ function onClearSelectionsClick():void
                     {#each dayContainer.entries as task (task.id)}
                         <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
                             selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}
-                            shiftSelectAction={lastSelectedWasSelection}/>
+                            shiftSelectAction={lastSelectedWasSelection}
+                            title={taskTitles[task.id]} onTitleChange={onRowTitleChange}/>
                     {/each}
                 </div>
             </div>
