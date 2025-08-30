@@ -34,3 +34,16 @@ interface TimeEntry
     timeEnd:number // unixtime seconds
     duration:number // seconds
 }
+
+/** edit to a time entry */
+interface TimeEntryEdit
+{
+    id:string
+
+    // empty to unset
+    title:string
+    // -1 to unset. unixtime seconds
+    timeStart:number
+    // -1 to unset. unixtime seconds
+    timeEnd:number
+}
