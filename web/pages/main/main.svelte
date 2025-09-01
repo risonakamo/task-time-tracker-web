@@ -26,6 +26,9 @@ var tttState:TTTState=$state({
  *  set initially when data loaded, changed by user editing */
 var taskTitles:TaskTitlesDict=$state({});
 
+/** contains edited times */
+var editedTimes:EditedTimesDict=$state({});
+
 /** the new task input field */
 var newTaskTitleField:string=$state("");
 
@@ -99,7 +102,7 @@ var editedTitlesNum:number=$derived(Object.keys(editedTaskTitles).length);
 onMount(()=>{
     (async ()=>{
         tttState=await getState();
-        genTaskTitlesDict();
+        genEditedDicts();
     })();
 
     setInterval(()=>{
@@ -159,16 +162,22 @@ function doShiftSelect(task1:TimeEntry,task2:TimeEntry,select:boolean):void
 }
 
 /** create task titles dict from the current state */
-function genTaskTitlesDict():void
+function genEditedDicts():void
 {
     const newDict:TaskTitlesDict={};
+    const newTimesDict:EditedTimesDict={};
 
     for (const task of tttState.allTasks)
     {
         newDict[task.id]=task.title;
+        newTimesDict[task.id]={
+            start:task.timeStart,
+            end:task.timeEnd,
+        };
     }
 
     taskTitles=newDict;
+    editedTimes=newTimesDict;
 }
 
 /** clicked start button. send start task request with the contents of the task field,
@@ -246,13 +255,13 @@ async function onApplyEdits():Promise<void>
     );
 
     tttState=newState;
-    genTaskTitlesDict();
+    genEditedDicts();
 }
 
 /** clicked cancel edits. regen the title edits obj to match original state */
 function onCancelEdits():void
 {
-    genTaskTitlesDict();
+    genEditedDicts();
 }
 </script>
 
@@ -327,7 +336,9 @@ function onCancelEdits():void
                         <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
                             selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}
                             shiftSelectAction={lastSelectedWasSelection}
-                            title={taskTitles[task.id]} onTitleChange={onRowTitleChange}/>
+                            title={taskTitles[task.id]} onTitleChange={onRowTitleChange}
+                            startDate={editedTimes[task.id].start}
+                            endDate={editedTimes[task.id].end}/>
                     {/each}
                 </div>
             </div>
