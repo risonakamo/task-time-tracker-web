@@ -128,6 +128,7 @@ async function startTask2(title:string):Promise<void>
     }
 
     tttState=await startTask(newTaskTitle);
+    genTaskTitlesDict();
 
     newTaskTitleField="";
 }
@@ -197,6 +198,7 @@ function onTitleInputKey(e:KeyboardEvent):void
 async function onStopClick():Promise<void>
 {
     tttState=await stopTask();
+    genTaskTitlesDict();
 }
 
 /** time entry changed select state. update the selected entrys state.
