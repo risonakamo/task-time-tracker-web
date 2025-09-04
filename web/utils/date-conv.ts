@@ -44,3 +44,35 @@ export function toWordDate(unixSeconds:number):string
 
     return formatted;
 }
+
+/** given a new timestring that looks like 1204, try to set this as the time on
+ *  the given original date. the time string can be dirty, will remove all non-numbers
+ *  and pad to 4 digits. does nothing if bad conversion */
+export function combineTimeStringWithUnixSec(
+    newTimeString:string,
+    originalDate:number,
+):number
+{
+    newTimeString=newTimeString.replace(/D/g,"");
+    newTimeString=newTimeString.padStart(4,"0");
+
+    if (newTimeString.length!=4)
+    {
+        console.warn("bad conversion - too many digits");
+        return originalDate;
+    }
+
+    const hours:number=parseInt(newTimeString.slice(0,2));
+    const mins:number=parseInt(newTimeString.slice(2,4));
+
+    if (hours>23 || mins>59 || hours<0 || mins<0)
+    {
+        console.error("hours or mins were invalid");
+        return originalDate;
+    }
+
+    const newDate:Date=new Date(originalDate*1000);
+    newDate.setHours(hours,mins,0,0);
+
+    return newDate.getTime()/1000;
+}

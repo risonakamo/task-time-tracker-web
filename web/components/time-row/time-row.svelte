@@ -6,7 +6,10 @@ var {
     isSubEntry=false,
     selected,
     shiftSelectAction,
+
     title,
+    startDate,
+    endDate,
 
     onPlay,
     onSelect,
@@ -17,7 +20,10 @@ var {
     selected:boolean
     // what should happen to this item on a shift select
     shiftSelectAction:boolean
+
     title:string
+    startDate:number
+    endDate:number
 
     // clicked play button. passes up the time entry that was just clicked
     onPlay(timeEntry:TimeEntry):void
@@ -30,21 +36,21 @@ var {
 }=$props();
 
 var timeEndTextShort:string=$derived.by(()=>{
-    if (timeEntry.timeEnd<0)
+    if (endDate<0)
     {
         return "...";
     }
 
-    return toTimeOnly(timeEntry.timeEnd);
+    return toTimeOnly(endDate);
 });
 
 var timeEndTextLong:string=$derived.by(()=>{
-    if (timeEntry.timeEnd<0)
+    if (endDate<0)
     {
         return "...";
     }
 
-    return toDateTime(timeEntry.timeEnd);
+    return toDateTime(endDate);
 });
 
 var durationText:string=$derived.by(()=>{
@@ -88,6 +94,11 @@ function onTitleChange2(e:Event):void
 {
     onTitleChange(timeEntry,(e.currentTarget as HTMLInputElement).value);
 }
+
+function onStartTimeChange(e:Event):void
+{
+    e.preventDefault();
+}
 </script>
 
 <style lang="sass">
@@ -105,8 +116,9 @@ function onTitleChange2(e:Event):void
     </div>
 
     <div class="time-range">
-        <input type="text" value={toTimeOnly(timeEntry.timeStart)}
-            class="hover-fade-input" title={toDateTime(timeEntry.timeStart)}/>
+        <input type="text" value={toTimeOnly(startDate)}
+            class="hover-fade-input" title={toDateTime(startDate)}
+            onchange={onStartTimeChange}/>
         -
         <input type="text" value={timeEndTextShort}
             class="hover-fade-input" title={timeEndTextLong}/>
