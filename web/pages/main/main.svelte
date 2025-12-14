@@ -1,12 +1,13 @@
 <script lang="ts">
 import {onMount} from "svelte";
-import _ from "lodash";
+import _, {uniq} from "lodash";
 import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {editTasks2, getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
 import {createChangeRequest, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
+    import TaskAdder from "@/components/task-adder/task-adder.svelte";
 
 /** the main backend state */
 var tttState:TTTState=$state({
@@ -263,35 +264,10 @@ function onCancelEdits():void
 </style>
 
 <div class="controls">
-    <div class="task-adder">
-        <input type="text" list="task-auto-complete" class="task-input"
-            placeholder="New Task" bind:value={newTaskTitleField} onkeydown={onTitleInputKey}/>
-
-        <datalist id="task-auto-complete">
-            {#each uniqueTaskNames as taskName (taskName)}
-                <option value={taskName}></option>
-            {/each}
-        </datalist>
-
-        <button class="start-button" onclick={onClickStart}>Start</button>
-    </div>
-
-    <div class="task-timer">
-        <div class="left">
-            <p>current task: <span class="task-text">{currentTaskText}</span></p>
-        </div>
-
-        <div class="right">
-            <div class="timer">
-                <h3>{currentTaskTimer}</h3>
-                <button class="stop-button" onclick={onStopClick}
-                    disabled={!tttState.currentTaskValid}
-                >
-                    Stop
-                </button>
-            </div>
-        </div>
-    </div>
+    <TaskAdder bind:newTaskTitleField={newTaskTitleField} uniqueTaskNames={uniqueTaskNames}
+        onTitleInputKey={onTitleInputKey} onClickStart={onClickStart}
+        currentTaskText={currentTaskText} currentTaskTimer={currentTaskTimer}
+        onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}/>
 
     <div class="selection-info">
         <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>
