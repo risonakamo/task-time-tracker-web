@@ -41,7 +41,7 @@ var {
 
     <div class="bottom">
         <div class="left">
-            <p>current task: <span class="task-text">{currentTaskText}</span></p>
+            <p>current task -> <span class="task-text">{currentTaskText}</span></p>
 
             <div class="timer">
                 <h3>{currentTaskTimer}</h3>
