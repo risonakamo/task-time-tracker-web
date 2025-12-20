@@ -5,7 +5,7 @@ import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {editTasks2, getState, startTask, stopTask} from "@/lib/ttt-api";
-import {durationFormat, toDateTime, toWordDate} from "@/utils/date-conv";
+import {durationFormat, toDateTime, toTimeOnly, toWordDate} from "@/utils/date-conv";
 import {createChangeRequest, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
     import TaskAdder from "@/components/task-adder/task-adder.svelte";
 
@@ -32,6 +32,9 @@ var newTaskTitleField:string=$state("");
 
 /** text showing the duration of the current task */
 var currentTaskTimer:string=$state("00:00:00");
+
+/** the current time input values of the rows */
+var rowTimes:EditedTimesDict=$state({});
 
 /** text of the current running task */
 var currentTaskText:string=$derived.by(()=>{
@@ -101,6 +104,7 @@ onMount(()=>{
     (async ()=>{
         tttState=await getState();
         genTaskTitlesDict();
+        genEditedTimesDict();
     })();
 
     setInterval(()=>{
@@ -171,6 +175,22 @@ function genTaskTitlesDict():void
     }
 
     taskTitles=newDict;
+}
+
+/** set the row time input fields to the values from the state */
+function genEditedTimesDict():void
+{
+    const newDict:EditedTimesDict={};
+
+    for (const task of tttState.allTasks)
+    {
+        newDict[task.id]={
+            startTime:toTimeOnly(task.timeStart),
+            endTime:toTimeOnly(task.timeEnd),
+        };
+    }
+
+    rowTimes=newDict;
 }
 
 /** clicked start button. send start task request with the contents of the task field,
@@ -256,6 +276,13 @@ async function onApplyEdits():Promise<void>
 function onCancelEdits():void
 {
     genTaskTitlesDict();
+    genEditedTimesDict();
+}
+
+/** edited time row. change the value in the time row values dict */
+function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
+{
+    rowTimes[timeEntry.id]=newTimes;
 }
 </script>
 
@@ -305,7 +332,9 @@ function onCancelEdits():void
                         <TimeRow timeEntry={task} onPlay={onEntryPlayClick}
                             selected={selectedEntrys.has(task.id)} onSelect={onEntrySelectChange}
                             shiftSelectAction={lastSelectedWasSelection}
-                            title={taskTitles[task.id]} onTitleChange={onRowTitleChange}/>
+                            title={taskTitles[task.id]} onTitleChange={onRowTitleChange}
+                            startTime={rowTimes[task.id].startTime}
+                            onTimeChanged={onTimeEdit}/>
                     {/each}
                 </div>
             </div>
