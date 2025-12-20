@@ -129,6 +129,18 @@ function onEndTimeChange(e:Event):void
         endTime:(e.currentTarget as HTMLInputElement).value,
     });
 }
+
+/** key handler for input fields. enter key defocuses the input */
+function onKey(e:KeyboardEvent):void
+{
+    if (e.key=="Enter")
+    {
+        if (e.currentTarget)
+        {
+            (e.currentTarget as HTMLElement).blur();
+        }
+    }
+}
 </script>
 
 <style lang="sass">
@@ -142,17 +154,19 @@ function onEndTimeChange(e:Event):void
 
     <div class="title">
         <input type="text" value={title} class="hover-fade-input" onchange={onTitleChange2}
-            class:edited={edited}/>
+            class:edited={edited} onkeydown={onKey}/>
     </div>
 
     <div class="time-range">
         <input type="text" value={startTime}
             class="hover-fade-input" title={timeStartTextLong}
-            onchange={onStartTimeChange} class:edited={startTimeEdited}/>
+            onchange={onStartTimeChange} class:edited={startTimeEdited}
+            onkeydown={onKey}/>
         -
         <input type="text" value={endTime}
             class="hover-fade-input" title={timeEndTextLong}
-            onchange={onEndTimeChange} class:edited={endTimeEdited}/>
+            onchange={onEndTimeChange} class:edited={endTimeEdited}
+            onkeydown={onKey}/>
     </div>
 
     <div class="duration">
