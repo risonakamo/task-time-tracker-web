@@ -134,6 +134,7 @@ async function startTask2(title:string):Promise<void>
 
     tttState=await startTask(newTaskTitle);
     genTaskTitlesDict();
+    genEditedTimesDict();
 
     newTaskTitleField="";
 }
@@ -227,6 +228,7 @@ async function onStopClick():Promise<void>
 {
     tttState=await stopTask();
     genTaskTitlesDict();
+    genEditedTimesDict();
 }
 
 /** time entry changed select state. update the selected entrys state.
@@ -277,6 +279,7 @@ async function onApplyEdits():Promise<void>
 
     tttState=newState;
     genTaskTitlesDict();
+    genEditedTimesDict();
 }
 
 /** clicked cancel edits. regen the title edits obj to match original state */

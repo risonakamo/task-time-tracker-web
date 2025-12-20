@@ -63,6 +63,27 @@ var isOngoing:boolean=$derived(timeEntry.duration<0);
 /** edited if the time entry (original title) doesn't match the 2nd title (editable) */
 var edited:boolean=$derived(timeEntry.title!=title);
 
+/** edited if the time entry's start/end time converted into time only does not match
+ *  the input time */
+var startTimeEdited:boolean=$derived.by(()=>{
+    // if missing start time somehow, return not edited
+    if (!timeEntry.timeStart)
+    {
+        return false;
+    }
+
+    return toTimeOnly(timeEntry.timeStart)!=startTime;
+});
+
+var endTimeEdited:boolean=$derived.by(()=>{
+    if (!timeEntry.timeEnd || timeEntry.timeEnd<=0)
+    {
+        return false;
+    }
+
+    return toTimeOnly(timeEntry.timeEnd)!=endTime;
+});
+
 /** clicked play button. call play click event */
 function onPlayClick():void
 {
@@ -127,11 +148,11 @@ function onEndTimeChange(e:Event):void
     <div class="time-range">
         <input type="text" value={startTime}
             class="hover-fade-input" title={timeStartTextLong}
-            onchange={onStartTimeChange}/>
+            onchange={onStartTimeChange} class:edited={startTimeEdited}/>
         -
         <input type="text" value={endTime}
             class="hover-fade-input" title={timeEndTextLong}
-            onchange={onEndTimeChange}/>
+            onchange={onEndTimeChange} class:edited={endTimeEdited}/>
     </div>
 
     <div class="duration">
