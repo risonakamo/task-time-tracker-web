@@ -184,9 +184,16 @@ function genEditedTimesDict():void
 
     for (const task of tttState.allTasks)
     {
+        var endTime:string="...";
+
+        if (task.timeEnd>0)
+        {
+            endTime=toTimeOnly(task.timeEnd);
+        }
+
         newDict[task.id]={
             startTime:toTimeOnly(task.timeStart),
-            endTime:toTimeOnly(task.timeEnd),
+            endTime:endTime,
         };
     }
 
@@ -334,7 +341,8 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
                             shiftSelectAction={lastSelectedWasSelection}
                             title={taskTitles[task.id]} onTitleChange={onRowTitleChange}
                             startTime={rowTimes[task.id].startTime}
-                            onTimeChanged={onTimeEdit}/>
+                            onTimeChanged={onTimeEdit}
+                            endTime={rowTimes[task.id].endTime}/>
                     {/each}
                 </div>
             </div>

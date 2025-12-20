@@ -8,6 +8,7 @@ var {
     shiftSelectAction,
     title,
     startTime,
+    endTime,
 
     onPlay,
     onSelect,
@@ -21,6 +22,7 @@ var {
     shiftSelectAction:boolean
     title:string
     startTime:string
+    endTime:string
 
     // clicked play button. passes up the time entry that was just clicked
     onPlay(timeEntry:TimeEntry):void
@@ -36,15 +38,6 @@ var {
 
 var timeStartTextLong:string=$derived.by(()=>{
     return toDateTime(timeEntry.timeStart);
-});
-
-var timeEndTextShort:string=$derived.by(()=>{
-    if (timeEntry.timeEnd<0)
-    {
-        return "...";
-    }
-
-    return toTimeOnly(timeEntry.timeEnd);
 });
 
 var timeEndTextLong:string=$derived.by(()=>{
@@ -103,7 +96,16 @@ function onStartTimeChange(e:Event):void
 {
     onTimeChanged(timeEntry,{
         startTime:(e.currentTarget as HTMLInputElement).value,
-        endTime:timeEndTextShort,
+        endTime:endTime,
+    });
+}
+
+/** end time input changed. trigger event */
+function onEndTimeChange(e:Event):void
+{
+    onTimeChanged(timeEntry,{
+        startTime:startTime,
+        endTime:(e.currentTarget as HTMLInputElement).value,
     });
 }
 </script>
@@ -127,8 +129,9 @@ function onStartTimeChange(e:Event):void
             class="hover-fade-input" title={timeStartTextLong}
             onchange={onStartTimeChange}/>
         -
-        <input type="text" value={timeEndTextShort}
-            class="hover-fade-input" title={timeEndTextLong}/>
+        <input type="text" value={endTime}
+            class="hover-fade-input" title={timeEndTextLong}
+            onchange={onEndTimeChange}/>
     </div>
 
     <div class="duration">
