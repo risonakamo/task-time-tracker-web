@@ -6,7 +6,7 @@ import {SvelteSet} from "svelte/reactivity";
 import TimeRow from "@/components/time-row/time-row.svelte";
 import {editTasks2, getState, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toTimeOnly, toWordDate} from "@/utils/date-conv";
-import {createChangeRequest, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
+import {createChangeRequest, getEditedTimes, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
     import TaskAdder from "@/components/task-adder/task-adder.svelte";
 
 /** the main backend state */
@@ -95,8 +95,17 @@ var editedTaskTitles:TaskTitlesDict=$derived(getTitlesEdits(
     taskTitles,
 ));
 
+/** rows with edited time values */
+var editedTimes:EditedTimesDict=$derived(getEditedTimes(
+    tttState.allTasks,
+    rowTimes,
+));
+
 /** if there is at least 1 edited task title */
-var editedTitlesNum:number=$derived(Object.keys(editedTaskTitles).length);
+var editedTitlesNum:number=$derived(
+    Object.keys(editedTaskTitles).length
+    +Object.keys(editedTimes).length
+);
 
 // on load, get the ttt state.
 // also, deploy the current task timer interval

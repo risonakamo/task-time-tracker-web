@@ -1,6 +1,7 @@
 // funcs for working with ttt state
 
 import _ from "lodash";
+import {toTimeOnly} from "@/utils/date-conv";
 
 /** given 2 time entries, get all time entries between them (including them again) */
 export function getTasksBetween(
@@ -53,6 +54,39 @@ export function getTitlesEdits(
         }
 
         return false;
+    });
+}
+
+/** determine which items in edited times dict is edited */
+export function getEditedTimes(
+    allTasks:TimeEntry[],
+    editedTimes:EditedTimesDict,
+):EditedTimesDict
+{
+    const keyedTasks:TaskDict=_.keyBy(allTasks,(task:TimeEntry):string=>{
+        return task.id;
+    });
+
+    // filter down to only the ones which are considered edited
+    return _.pickBy(editedTimes,(times:EditedTimes,id:string):boolean=>{
+        const origTask:TimeEntry=keyedTasks[id];
+
+        // if task is active, can't count as edited time
+        if (origTask.timeEnd<=0)
+        {
+            return false;
+        }
+
+        // if both of the edit time item matches the original, it's not edited
+        if (
+            toTimeOnly(origTask.timeStart)==times.startTime &&
+            toTimeOnly(origTask.timeEnd)==times.endTime
+        )
+        {
+            return false;
+        }
+
+        return true;
     });
 }
 
