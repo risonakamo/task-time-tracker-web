@@ -283,7 +283,7 @@ function onRowTitleChange(task:TimeEntry,newTitle:string):void
 async function onApplyEdits():Promise<void>
 {
     const newState:TTTState=await editTasks2(
-        createChangeRequest(editedTaskTitles)
+        createChangeRequest(editedTaskTitles,editedTimes,tttState.allTasks),
     );
 
     tttState=newState;

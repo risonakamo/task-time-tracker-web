@@ -1,7 +1,7 @@
 // funcs for working with ttt state
 
 import _ from "lodash";
-import {toTimeOnly} from "@/utils/date-conv";
+import {combineTimeStringWithUnixSec, toTimeOnly} from "@/utils/date-conv";
 
 /** given 2 time entries, get all time entries between them (including them again) */
 export function getTasksBetween(
@@ -42,9 +42,7 @@ export function getTitlesEdits(
     editedTitles:TaskTitlesDict,
 ):TaskTitlesDict
 {
-    const keyedTasks:TaskDict=_.keyBy(allTasks,(task:TimeEntry):string=>{
-        return task.id;
-    });
+    const keyedTasks:TaskDict=keyTasks(allTasks);
 
     // filter edited titles dict to only ones where it doesn't match the original
     return _.pickBy(editedTitles,(title:string,id:string):boolean=>{
@@ -63,9 +61,7 @@ export function getEditedTimes(
     editedTimes:EditedTimesDict,
 ):EditedTimesDict
 {
-    const keyedTasks:TaskDict=_.keyBy(allTasks,(task:TimeEntry):string=>{
-        return task.id;
-    });
+    const keyedTasks:TaskDict=keyTasks(allTasks);
 
     // filter down to only the ones which are considered edited
     return _.pickBy(editedTimes,(times:EditedTimes,id:string):boolean=>{
@@ -94,14 +90,62 @@ export function getEditedTimes(
  *  for backend */
 export function createChangeRequest(
     taskTitlesDict:TaskTitlesDict,
+    editedTimes:EditedTimesDict,
+    allTasks:TimeEntry[],
 ):TimeEntryEdit[]
 {
-    return _.map(taskTitlesDict,(newTitle:string,id:string):TimeEntryEdit=>{
-        return {
-            id,
-            title:newTitle,
-            timeStart:-1,
-            timeEnd:-1,
-        };
+    const edits:TimeEntryEditDict={};
+    const keyedTasks:TaskDict=keyTasks(allTasks);
+
+    // for all titles to be edited, create edit entry for it.
+    for (const id in taskTitlesDict)
+    {
+        // if doesn't exist yet, initialise
+        if (!(id in edits))
+        {
+            edits[id]={
+                id,
+                title:"",
+                timeStart:-1,
+                timeEnd:-1,
+            };
+        }
+
+        edits[id].title=taskTitlesDict[id];
+    }
+
+    for (const id in editedTimes)
+    {
+        const timeEdit:EditedTimes=editedTimes[id];
+
+        if (!(id in edits))
+        {
+            edits[id]={
+                id,
+                title:"",
+                timeStart:-1,
+                timeEnd:-1,
+            };
+        }
+
+        edits[id].timeStart=combineTimeStringWithUnixSec(
+            timeEdit.startTime,
+            keyedTasks[id].timeStart,
+        );
+
+        edits[id].timeEnd=combineTimeStringWithUnixSec(
+            timeEdit.endTime,
+            keyedTasks[id].timeEnd,
+        );
+    }
+
+    return _.map(edits);
+}
+
+/** convert task list into dict */
+function keyTasks(tasks:TimeEntry[]):TaskDict
+{
+    return _.keyBy(tasks,(task:TimeEntry):string=>{
+        return task.id;
     });
 }

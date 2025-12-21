@@ -1,5 +1,8 @@
 // types from ttt backend
 
+/** time entry edits keyed by id. key: entry edit id */
+type TimeEntryEditDict=Record<string,TimeEntryEdit>
+
 /** body to start a new task */
 interface StartTaskReq
 {
