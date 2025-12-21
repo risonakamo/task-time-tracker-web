@@ -161,12 +161,12 @@ function onKey(e:KeyboardEvent):void
         <input type="text" value={startTime}
             class="hover-fade-input" title={timeStartTextLong}
             onchange={onStartTimeChange} class:edited={startTimeEdited}
-            onkeydown={onKey}/>
+            onkeydown={onKey} readonly={isOngoing}/>
         -
         <input type="text" value={endTime}
             class="hover-fade-input" title={timeEndTextLong}
             onchange={onEndTimeChange} class:edited={endTimeEdited}
-            onkeydown={onKey}/>
+            onkeydown={onKey} readonly={isOngoing}/>
     </div>
 
     <div class="duration">
