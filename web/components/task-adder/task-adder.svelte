@@ -49,12 +49,21 @@ var {
         </div>
 
         <div class="right">
-            <button class="start-button" onclick={onClickStart}>Start</button>
+            <!-- <button class="start-button" onclick={onClickStart}>Start</button>
             <button class="stop-button" onclick={onStopClick}
                 disabled={!currentTaskValid}
             >
                 Stop
-            </button>
+            </button> -->
+
+            <div class="double-button">
+                <div class="left2 disabled">
+                    <s><h2>Start</h2></s>
+                </div>
+                <div class="right2">
+                    <h2>Stop</h2>
+                </div>
+            </div>
         </div>
     </div>
 </div>

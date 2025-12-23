@@ -60,3 +60,59 @@
                 &:active
                     background: #895336
                     color: #f3f3f3
+
+            .double-button
+                display: flex
+                width: 270px
+                height: 65px
+
+                & > div
+                    flex: 1
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    background: #2c2b2a
+                    cursor: pointer
+                    user-select: none
+
+                    &.disabled
+                        opacity: .5
+                        cursor: not-allowed
+                        color: #817777d4
+
+                        h2
+                            background: #817777d4
+                            background-clip: text
+
+                        &:hover
+                            background: #2c2b2a
+
+                    &:hover
+                        background: #262525
+
+                h2
+                    font-weight: 400
+                    margin: 0
+                    font-size: 24px
+
+                .left2
+                    border-radius: 6px 0 0 6px
+
+                    h2
+                        background: linear-gradient(87deg,rgba(201, 232, 146, 1) 0%, rgba(233, 255, 69, 1) 100%);
+                        background-clip: text
+                        -webkit-text-fill-color: transparent
+
+                    &:active
+                        background: linear-gradient(87deg, rgb(176 232 183 / 14%) 0%, rgb(240 213 38 / 9%) 100%)
+
+                .right2
+                    border-radius: 0 6px 6px 0
+
+                    h2
+                        background: linear-gradient(87deg,rgba(231, 158, 129, 1) 0%, rgba(247, 206, 129, 1) 100%)
+                        background-clip: text
+                        -webkit-text-fill-color: transparent
+
+                    &:active
+                        background: linear-gradient(87deg, rgb(186 133 108 / 16%) 0%, rgb(230 194 133 / 25%) 100%)
