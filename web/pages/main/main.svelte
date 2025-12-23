@@ -56,6 +56,8 @@ var lastSelectedTask:TimeEntry|null=$state(null);
  *  only valid if last selected item is not null */
 var lastSelectedWasSelection:boolean=$state(false);
 
+var taskAdderElement:TaskAdder;
+
 /** list of unique task names */
 var uniqueTaskNames:string[]=$derived.by(()=>{
     return _(tttState.allTasks)
@@ -141,6 +143,7 @@ async function startTask2(title:string):Promise<void>
         return;
     }
 
+    taskAdderElement.defocusInput();
     tttState=await startTask(newTaskTitle);
     genTaskTitlesDict();
     genEditedTimesDict();
@@ -226,8 +229,9 @@ function onEntryPlayClick(task:TimeEntry):void
 /** title input keypress. if enter, do same thing as pressing start button */
 function onTitleInputKey(e:KeyboardEvent):void
 {
-    if (e.key=="Enter")
+    if (e.key=="Enter" || (e.key==" " && e.ctrlKey))
     {
+        e.preventDefault();
         onClickStart();
     }
 }
@@ -313,7 +317,8 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
     <TaskAdder bind:newTaskTitleField={newTaskTitleField} uniqueTaskNames={uniqueTaskNames}
         onTitleInputKey={onTitleInputKey} onClickStart={onClickStart}
         currentTaskText={currentTaskText} currentTaskTimer={currentTaskTimer}
-        onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}/>
+        onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}
+        bind:this={taskAdderElement}/>
 
     <div class="selection-info">
         <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>

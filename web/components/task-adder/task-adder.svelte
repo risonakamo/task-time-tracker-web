@@ -24,6 +24,14 @@ var {
 var stopButtonDisabled:boolean=$derived(!currentTaskValid);
 var startButtonDisabled:boolean=$derived(newTaskTitleField.length<=0);
 
+var taskInputElement:HTMLInputElement;
+
+/** defocus the text input */
+export function defocusInput():void
+{
+    taskInputElement.blur();
+}
+
 /** passthrough to on stop click. disabled if stop button disabled */
 function onStopClick2():void
 {
@@ -55,7 +63,7 @@ function onStartClick2():void
     <div class="input-zone">
         <input type="text" list="task-auto-complete" class="task-input"
             placeholder="New Task" bind:value={newTaskTitleField}
-            onkeydown={onTitleInputKey}/>
+            onkeydown={onTitleInputKey} bind:this={taskInputElement}/>
 
         <datalist id="task-auto-complete">
             {#each uniqueTaskNames as taskName (taskName)}
