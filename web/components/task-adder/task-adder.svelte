@@ -20,6 +20,31 @@ var {
     onClickStart():void
     onStopClick():void
 }=$props();
+
+var stopButtonDisabled:boolean=$derived(!currentTaskValid);
+var startButtonDisabled:boolean=$derived(newTaskTitleField.length<=0);
+
+/** passthrough to on stop click. disabled if stop button disabled */
+function onStopClick2():void
+{
+    if (stopButtonDisabled)
+    {
+        return;
+    }
+
+    onStopClick();
+}
+
+/** passthrough to on start click. disable if start button disabled */
+function onStartClick2():void
+{
+    if (startButtonDisabled)
+    {
+        return;
+    }
+
+    onClickStart();
+}
 </script>
 
 <style lang="sass">
@@ -49,18 +74,11 @@ var {
         </div>
 
         <div class="right">
-            <!-- <button class="start-button" onclick={onClickStart}>Start</button>
-            <button class="stop-button" onclick={onStopClick}
-                disabled={!currentTaskValid}
-            >
-                Stop
-            </button> -->
-
             <div class="double-button">
-                <div class="left2 disabled">
-                    <s><h2>Start</h2></s>
+                <div class="left2" onclick={onStartClick2} class:disabled={startButtonDisabled}>
+                    <h2>Start</h2>
                 </div>
-                <div class="right2">
+                <div class="right2" onclick={onStopClick2} class:disabled={stopButtonDisabled}>
                     <h2>Stop</h2>
                 </div>
             </div>
