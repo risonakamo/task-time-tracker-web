@@ -239,6 +239,11 @@ function onTitleInputKey(e:KeyboardEvent):void
 /** clicked stop task. send stop task request. update state */
 async function onStopClick():Promise<void>
 {
+    if (!tttState.currentTaskValid)
+    {
+        return;
+    }
+
     tttState=await stopTask();
     genTaskTitlesDict();
     genEditedTimesDict();
@@ -307,6 +312,37 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
 {
     rowTimes[timeEntry.id]=newTimes;
 }
+
+/** global key handler */
+function onGlobalKeyInput(e:KeyboardEvent):void
+{
+    // if press ctrl+space while not on the taskbox
+    // - if there is an active task, stop the task
+    // - if there isn't an active task, focus the box
+    if (
+        e.key==" " && !taskAdderElement.inputIsFocused() && e.ctrlKey
+    )
+    {
+        e.preventDefault();
+
+        if (tttState.currentTaskValid)
+        {
+            onStopClick();
+        }
+
+        else
+        {
+            taskAdderElement.focusInput();
+        }
+    }
+
+    // if press space while input is not focused, focus the input
+    else if (e.key==" " && !taskAdderElement.inputIsFocused())
+    {
+        e.preventDefault();
+        taskAdderElement.focusInput();
+    }
+}
 </script>
 
 <style lang="sass">
@@ -370,3 +406,5 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
 <svelte:head>
     <title>{documentTitle}</title>
 </svelte:head>
+
+<svelte:window onkeydown={onGlobalKeyInput}/>

@@ -32,6 +32,18 @@ export function defocusInput():void
     taskInputElement.blur();
 }
 
+/** check if is focused */
+export function inputIsFocused():boolean
+{
+    return taskInputElement==document.activeElement;
+}
+
+/** focus the input */
+export function focusInput():void
+{
+    taskInputElement.focus();
+}
+
 /** passthrough to on stop click. disabled if stop button disabled */
 function onStopClick2():void
 {
