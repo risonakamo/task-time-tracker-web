@@ -229,7 +229,7 @@ function onEntryPlayClick(task:TimeEntry):void
 /** title input keypress. if enter, do same thing as pressing start button */
 function onTitleInputKey(e:KeyboardEvent):void
 {
-    if (e.key=="Enter" || (e.key==" " && e.ctrlKey))
+    if (e.key=="Enter")
     {
         e.preventDefault();
         onClickStart();
@@ -316,14 +316,23 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
 /** global key handler */
 function onGlobalKeyInput(e:KeyboardEvent):void
 {
+    // if input is focused, and did ctrl+space, do submit
+    if (e.key==" " && e.ctrlKey && taskAdderElement.inputIsFocused())
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        onClickStart();
+    }
+
     // if press ctrl+space while not on the taskbox
     // - if there is an active task, stop the task
     // - if there isn't an active task, focus the box
-    if (
+    else if (
         e.key==" " && !taskAdderElement.inputIsFocused() && e.ctrlKey
     )
     {
         e.preventDefault();
+        e.stopPropagation();
 
         if (tttState.currentTaskValid)
         {
@@ -340,6 +349,7 @@ function onGlobalKeyInput(e:KeyboardEvent):void
     else if (e.key==" " && !taskAdderElement.inputIsFocused())
     {
         e.preventDefault();
+        e.stopPropagation();
         taskAdderElement.focusInput();
     }
 }
