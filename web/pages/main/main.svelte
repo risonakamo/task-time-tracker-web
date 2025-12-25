@@ -345,13 +345,13 @@ function onGlobalKeyInput(e:KeyboardEvent):void
         }
     }
 
-    // if press space while input is not focused, focus the input
-    else if (e.key==" " && !taskAdderElement.inputIsFocused())
-    {
-        e.preventDefault();
-        e.stopPropagation();
-        taskAdderElement.focusInput();
-    }
+    // // if press space while input is not focused, focus the input
+    // else if (e.key==" " && !taskAdderElement.inputIsFocused())
+    // {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     taskAdderElement.focusInput();
+    // }
 }
 </script>
 
