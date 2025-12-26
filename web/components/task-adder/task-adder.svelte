@@ -86,9 +86,14 @@ function onStartClick2():void
 
     <div class="bottom">
         <div class="left">
-            <p>current task -> <span class="task-text">{currentTaskText}</span></p>
+            <p>
+                current task ->
+                <span class="task-text" class:active={currentTaskValid}>
+                    {currentTaskText}
+                </span>
+            </p>
 
-            <div class="timer">
+            <div class="timer" class:active={currentTaskValid}>
                 <h3>{currentTaskTimer}</h3>
             </div>
         </div>
