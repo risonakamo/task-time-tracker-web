@@ -415,6 +415,10 @@ function onGlobalKeyInput(e:KeyboardEvent):void
         bind:this={taskAdderElement}/>
 </div>
 
+<div class="global-control">
+    <a href="javascript:;">Data folder</a>
+</div>
+
 <svelte:head>
     <title>{documentTitle}</title>
 </svelte:head>
