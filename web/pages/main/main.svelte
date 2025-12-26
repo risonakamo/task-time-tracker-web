@@ -359,6 +359,23 @@ function onGlobalKeyInput(e:KeyboardEvent):void
     @use "./main.sass"
 </style>
 
+<div class="selection-info">
+    <div class="wrap">
+        <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>
+        {#if selectedEntrys.size>0}
+            <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
+        {/if}
+        {#if editedTitlesNum>0}
+            <a href="javascript:;" onclick={onApplyEdits}>
+                apply edits ({editedTitlesNum})
+            </a>
+            <a href="javascript:;" onclick={onCancelEdits}>
+                cancel edits
+            </a>
+        {/if}
+    </div>
+</div>
+
 <div class="time-table">
     <div class="inner">
         {#each tttState.dayContainers as dayContainer (dayContainer.dateKey)}
@@ -396,21 +413,6 @@ function onGlobalKeyInput(e:KeyboardEvent):void
         currentTaskText={currentTaskText} currentTaskTimer={currentTaskTimer}
         onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}
         bind:this={taskAdderElement}/>
-
-    <div class="selection-info">
-        <span>Selected: {selectedEntrys.size}, Total Time: {totalSelectedTimeText}</span>
-        {#if selectedEntrys.size>0}
-            <a href="javascript:;" onclick={onClearSelectionsClick}>clear selection</a>
-        {/if}
-        {#if editedTitlesNum>0}
-            <a href="javascript:;" onclick={onApplyEdits}>
-                apply edits ({editedTitlesNum})
-            </a>
-            <a href="javascript:;" onclick={onCancelEdits}>
-                cancel edits
-            </a>
-        {/if}
-    </div>
 </div>
 
 <svelte:head>
