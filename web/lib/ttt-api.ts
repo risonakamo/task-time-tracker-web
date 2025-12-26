@@ -43,3 +43,9 @@ export async function editTasks2(edits:TimeEntryEdit[]):Promise<TTTState>
 {
     return (await ax.post("/edit-tasks2",edits)).data;
 }
+
+/** send request to open the data dir */
+export async function openDataDir():Promise<void>
+{
+    return ax.get("/open-data-folder");
+}
