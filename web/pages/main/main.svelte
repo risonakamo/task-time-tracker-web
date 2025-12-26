@@ -109,6 +109,8 @@ var editedTitlesNum:number=$derived(
     +Object.keys(editedTimes).length
 );
 
+var timeRowsTableElement:HTMLDivElement;
+
 // on load, get the ttt state.
 // also, deploy the current task timer interval
 onMount(()=>{
@@ -147,6 +149,7 @@ async function startTask2(title:string):Promise<void>
     tttState=await startTask(newTaskTitle);
     genTaskTitlesDict();
     genEditedTimesDict();
+    timeRowsTableElement.scrollTop=0;
 
     newTaskTitleField="";
 }
@@ -382,7 +385,7 @@ function onDataDirOpen():void
     </div>
 </div>
 
-<div class="time-table">
+<div class="time-table" bind:this={timeRowsTableElement}>
     <div class="inner">
         {#each tttState.dayContainers as dayContainer (dayContainer.dateKey)}
             <div class="day-box">
