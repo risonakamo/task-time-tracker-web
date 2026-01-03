@@ -175,6 +175,6 @@ function onKey(e:KeyboardEvent):void
 
     <div class="buttons">
         <button onclick={onPlayClick}>▶</button>
-        <button>🗑</button>
+        <!-- <button>🗑</button> -->
     </div>
 </div>
