@@ -4,7 +4,7 @@ import _, {uniq} from "lodash";
 import {SvelteSet} from "svelte/reactivity";
 
 import TimeRow from "@/components/time-row/time-row.svelte";
-import {editTasks2, getState, openDataDir, startTask, stopTask} from "@/lib/ttt-api";
+import {closeProgram, editTasks2, getState, openDataDir, startTask, stopTask} from "@/lib/ttt-api";
 import {durationFormat, toDateTime, toTimeOnly, toWordDate} from "@/utils/date-conv";
 import {createChangeRequest, getEditedTimes, getTasksBetween, getTitlesEdits} from "@/lib/ttt-state";
     import TaskAdder from "@/components/task-adder/task-adder.svelte";
@@ -362,6 +362,16 @@ function onDataDirOpen():void
 {
     openDataDir();
 }
+
+/** clicked close button */
+function onClose():void
+{
+    closeProgram();
+
+    setTimeout(()=>{
+        window.close();
+    },1000);
+}
 </script>
 
 <style lang="sass">
@@ -428,6 +438,7 @@ function onDataDirOpen():void
 
 <div class="global-control">
     <a href="javascript:;" onclick={onDataDirOpen}>Data folder</a>
+    <a href="javascript:;" onclick={onClose}>Exit</a>
 </div>
 
 <svelte:head>

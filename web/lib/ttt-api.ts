@@ -49,3 +49,9 @@ export async function openDataDir():Promise<void>
 {
     return ax.get("/open-data-folder");
 }
+
+/** send request to close */
+export async function closeProgram():Promise<void>
+{
+    return ax.get("/close");
+}
