@@ -387,10 +387,12 @@ function onDataDirOpen():void
 
 <div class="time-table" bind:this={timeRowsTableElement}>
     <div class="inner">
-        {#each tttState.dayContainers as dayContainer (dayContainer.dateKey)}
+        {#each tttState.dayContainers as dayContainer,dayIndex (dayContainer.dateKey)}
+            {@const dayNumber=tttState.dayContainers.length-dayIndex}
             <div class="day-box">
                 <div class="day-header">
                     <div class="title" title={toDateTime(dayContainer.date)}>
+                        <span class="day-number">{dayNumber}</span>
                         <!-- Sat, Jun 5 (Today) -->
                         {toWordDate(dayContainer.date)}
                     </div>
