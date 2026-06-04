@@ -9,6 +9,7 @@ var {
     onTitleInputKey,
     onClickStart,
     onStopClick,
+    onRedoClick,
 }:{
     newTaskTitleField:string
     uniqueTaskNames:string[]
@@ -19,6 +20,7 @@ var {
     onTitleInputKey(e:KeyboardEvent):void
     onClickStart():void
     onStopClick():void
+    onRedoClick():Promise<void>
 }=$props();
 
 var stopButtonDisabled:boolean=$derived(!currentTaskValid);
@@ -65,6 +67,12 @@ function onStartClick2():void
 
     onClickStart();
 }
+
+/** passthrough to on redo click */
+function onRedoClick2():void
+{
+    onRedoClick();
+}
 </script>
 
 <style lang="sass">
@@ -99,6 +107,10 @@ function onStartClick2():void
         </div>
 
         <div class="right">
+            <div class="restart-button" onclick={onRedoClick2}>
+                <h2>Redo</h2>
+            </div>
+
             <div class="double-button">
                 <div class="left2" onclick={onStartClick2} class:disabled={startButtonDisabled}>
                     <h2>Start</h2>
@@ -106,10 +118,6 @@ function onStartClick2():void
                 <div class="right2" onclick={onStopClick2} class:disabled={stopButtonDisabled}>
                     <h2>Stop</h2>
                 </div>
-            </div>
-
-            <div class="restart-button">
-                <h2>Redo</h2>
             </div>
         </div>
     </div>

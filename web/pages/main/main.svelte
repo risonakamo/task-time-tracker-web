@@ -372,6 +372,43 @@ function onClose():void
         window.close();
     },1000);
 }
+
+/** get the most recent task (first in list) if it has been completed (timeEnd > 0) */
+function getLastDoneTask():TimeEntry|null
+{
+    if (tttState.allTasks.length===0)
+    {
+        return null;
+    }
+
+    const firstTask=tttState.allTasks[0];
+
+    if (firstTask.timeEnd>0)
+    {
+        return firstTask;
+    }
+
+    return null;
+}
+
+/** clicked redo button. start the last done task. if there is a current task running,
+ *  stop it first then start the last done task */
+async function onRedoClick():Promise<void>
+{
+    const lastDoneTask:TimeEntry|null=getLastDoneTask();
+
+    if (lastDoneTask==null)
+    {
+        return;
+    }
+
+    if (tttState.currentTaskValid)
+    {
+        await onStopClick();
+    }
+
+    await startTask2(lastDoneTask.title);
+}
 </script>
 
 <style lang="sass">
@@ -433,6 +470,7 @@ function onClose():void
         onTitleInputKey={onTitleInputKey} onClickStart={onClickStart}
         currentTaskText={currentTaskText} currentTaskTimer={currentTaskTimer}
         onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}
+        onRedoClick={onRedoClick}
         bind:this={taskAdderElement}/>
 </div>
 
