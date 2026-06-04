@@ -107,8 +107,11 @@ function onRedoClick2():void
         </div>
 
         <div class="right">
-            <div class="restart-button" onclick={onRedoClick2}>
-                <h2>Redo</h2>
+            <div class="restart-button-container">
+                <div class="restart-button" onclick={onRedoClick2}>
+                    <h2>Redo</h2>
+                </div>
+                <p class="last-task-text">sample text that might be kind of long</p>
             </div>
 
             <div class="double-button">
