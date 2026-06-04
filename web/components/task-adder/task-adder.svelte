@@ -107,6 +107,10 @@ function onStartClick2():void
                     <h2>Stop</h2>
                 </div>
             </div>
+
+            <div class="restart-button">
+                <h2>Redo</h2>
+            </div>
         </div>
     </div>
 </div>

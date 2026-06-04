@@ -57,6 +57,11 @@
             justify-content: flex-end
             flex: 1
 
+            h2
+                font-weight: 400
+                margin: 0
+                font-size: 24px
+
             button
                 background: #272325
                 color: var(--main-text)
@@ -105,11 +110,6 @@
                     &:hover
                         background: #262525
 
-                h2
-                    font-weight: 400
-                    margin: 0
-                    font-size: 24px
-
                 .left2
                     border-radius: 6px 0 0 6px
 
@@ -131,3 +131,29 @@
 
                     &:active
                         background: linear-gradient(87deg, rgb(186 133 108 / 16%) 0%, rgb(230 194 133 / 25%) 100%)
+
+            .restart-button
+                display: flex
+                align-items: center
+                justify-content: center
+                background: #2c2b2a
+                cursor: pointer
+                user-select: none
+                width: 128px
+                height: 65px
+                border-radius: 6px
+                margin-left: 12px
+                font-size: 22px
+                font-weight: 400
+
+                h2
+                    background: linear-gradient(87deg, rgba(200, 100, 230, 1) 0%, rgba(220, 150, 255, 1) 100%)
+                    background-clip: text
+                    -webkit-text-fill-color: transparent
+                    margin: 0
+
+                &:hover
+                    background: #262525
+
+                &:active
+                    background: linear-gradient(87deg, rgb(150 80 180 / 20%) 0%, rgb(200 130 230 / 15%) 100%)
