@@ -111,6 +111,18 @@ var editedTitlesNum:number=$derived(
 
 var timeRowsTableElement:HTMLDivElement;
 
+/** the last done task text to display in the redo button */
+var lastRedoTaskText:string=$derived.by(()=>{
+    const lastDoneTask:TimeEntry|null=getLastDoneTask();
+
+    if (lastDoneTask)
+    {
+        return lastDoneTask.title;
+    }
+
+    return "";
+});
+
 // on load, get the ttt state.
 // also, deploy the current task timer interval
 onMount(()=>{
@@ -373,9 +385,17 @@ function onClose():void
     },1000);
 }
 
-/** get the most recent task (first in list) if it has been completed (timeEnd > 0) */
+/** get the task that should be redone: either the current task (if one is running),
+ *  or the most recent completed task */
 function getLastDoneTask():TimeEntry|null
 {
+    // If there's a current task running, return that
+    if (tttState.currentTaskValid)
+    {
+        return tttState.currentTask;
+    }
+
+    // Otherwise, return the first completed task
     if (tttState.allTasks.length===0)
     {
         return null;
@@ -470,7 +490,7 @@ async function onRedoClick():Promise<void>
         onTitleInputKey={onTitleInputKey} onClickStart={onClickStart}
         currentTaskText={currentTaskText} currentTaskTimer={currentTaskTimer}
         onStopClick={onStopClick} currentTaskValid={tttState.currentTaskValid}
-        onRedoClick={onRedoClick}
+        onRedoClick={onRedoClick} lastRedoTaskText={lastRedoTaskText}
         bind:this={taskAdderElement}/>
 </div>
 

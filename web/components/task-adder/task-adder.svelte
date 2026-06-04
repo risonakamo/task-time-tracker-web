@@ -5,6 +5,7 @@ var {
     currentTaskText,
     currentTaskTimer,
     currentTaskValid,
+    lastRedoTaskText,
 
     onTitleInputKey,
     onClickStart,
@@ -16,6 +17,7 @@ var {
     currentTaskText:string
     currentTaskTimer:string
     currentTaskValid:boolean
+    lastRedoTaskText:string
 
     onTitleInputKey(e:KeyboardEvent):void
     onClickStart():void
@@ -111,7 +113,7 @@ function onRedoClick2():void
                 <div class="restart-button" onclick={onRedoClick2}>
                     <h2>Redo</h2>
                 </div>
-                <p class="last-task-text">sample text that might be kind of long</p>
+                <p class="last-task-text">{lastRedoTaskText}</p>
             </div>
 
             <div class="double-button">
