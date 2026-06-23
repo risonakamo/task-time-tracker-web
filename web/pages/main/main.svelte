@@ -396,7 +396,7 @@ function getLastDoneTask():TimeEntry|null
     }
 
     // Otherwise, return the first completed task
-    if (tttState.allTasks.length===0)
+    if (!tttState.allTasks || tttState.allTasks.length===0)
     {
         return null;
     }
