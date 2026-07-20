@@ -329,8 +329,15 @@ function onTimeEdit(timeEntry:TimeEntry,newTimes:EditedTimes):void
 }
 
 /** global key handler */
-function onGlobalKeyInput(e:KeyboardEvent):void
-{
+function onGlobalKeyInput(e: KeyboardEvent): void {
+    // ---- REDO keyboard shortcut: Ctrl+Q ----
+    if (e.key === "q" && e.ctrlKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        onRedoClick();
+        return;
+    }
+
     // if input is focused, and did ctrl+space, do submit
     if (e.key==" " && e.ctrlKey && taskAdderElement.inputIsFocused())
     {
