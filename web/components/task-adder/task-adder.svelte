@@ -109,13 +109,6 @@ function onRedoClick2():void
         </div>
 
         <div class="right">
-            <div class="restart-button-container">
-                <div class="restart-button" onclick={onRedoClick2}>
-                    <h2>Redo</h2>
-                </div>
-                <p class="last-task-text">{lastRedoTaskText}</p>
-            </div>
-
             <div class="double-button">
                 <div class="left2" onclick={onStartClick2} class:disabled={startButtonDisabled}>
                     <h2>Start</h2>
@@ -123,6 +116,13 @@ function onRedoClick2():void
                 <div class="right2" onclick={onStopClick2} class:disabled={stopButtonDisabled}>
                     <h2>Stop</h2>
                 </div>
+            </div>
+
+            <div class="restart-button-container">
+                <div class="restart-button" onclick={onRedoClick2}>
+                    <h2>Redo</h2>
+                </div>
+                <p class="last-task-text">{lastRedoTaskText}</p>
             </div>
         </div>
     </div>
