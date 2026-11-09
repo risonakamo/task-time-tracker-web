@@ -23,6 +23,9 @@ importers:
       colord:
         specifier: ^2.11.0
         version: 2.11.0
+      hashery:
+        specifier: ^3.0.5
+        version: 3.0.5
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -613,9 +616,17 @@ packages:
     resolution: {integrity: sha512-NqADB8VjPFLM2V0VvHUewwwsw0ZWBaIdgo+ieHtK3hasLz4qeCRjYcqfB6AQrBggRKppKF8L52/VqdVsO47Dlw==}
     engines: {node: '>= 0.4'}
 
+  hashery@3.0.5:
+    resolution: {integrity: sha512-JqXNwGkTWXpPcz6I1nQVPcVUt8fFOQpl4mRlAjJttrv2J3Sh+c1ZvA/PmglZyf6BHYoL9C0q3w7Q47lXOigfOA==}
+    engines: {node: '>=22.18'}
+
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  hookified@3.1.0:
+    resolution: {integrity: sha512-G2jPVpzwIiV7pcYcg62ngNvY+y0iCkKmuJIaQpomFdvtY89UiSvWuPiNo1AalSr1t2op1cdz21ZThZc3DSbmvA==}
+    engines: {node: '>=22.18.0'}
 
   immutable@5.1.2:
     resolution: {integrity: sha512-qHKXW1q6liAk1Oys6umoaZbDRqjcjgSrbnrifHsfsttza7zcvRAsL7mMV6xWcyhwQy7Xj5v4hhbr6b+iDYwlmQ==}
@@ -1333,9 +1344,15 @@ snapshots:
     dependencies:
       has-symbols: 1.1.0
 
+  hashery@3.0.5:
+    dependencies:
+      hookified: 3.1.0
+
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hookified@3.1.0: {}
 
   immutable@5.1.2: {}
 
