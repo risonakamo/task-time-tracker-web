@@ -434,7 +434,7 @@ function onClose():void
 }
 
 /** clicked redo button. start the last done task. if there is a current task running,
- *  stop it first then start the last done task */
+ *  stop it instead */
 async function onRedoClick():Promise<void>
 {
     const lastDoneTask:TimeEntry|null=getLastDoneTask();
@@ -447,6 +447,7 @@ async function onRedoClick():Promise<void>
     if (tttState.currentTaskValid)
     {
         await onStopClick();
+        return;
     }
 
     await startTask2(lastDoneTask.title);
