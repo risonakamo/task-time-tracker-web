@@ -23,8 +23,8 @@ function randomCustomColour():string
     }).toHex();
 }
 
-/** hash a string into a random colour */
-export function randomCustomColourHash(input:string):string
+/** hash a string into a random colour. give alpha as 0-1 */
+export function randomCustomColourHash(input:string,alpha:number):string
 {
     const randH: number = hashery.toNumberSync(
         input + "+hue",
@@ -45,5 +45,6 @@ export function randomCustomColourHash(input:string):string
         h:randH,
         s:randS,
         l:randL,
+        a:alpha,
     }).toHex();
 }

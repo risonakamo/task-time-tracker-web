@@ -90,8 +90,17 @@ var isHeader2:boolean=$derived(/^##[^#]/.test(title));
 var isHeader3:boolean=$derived(/^###[^#]/.test(title));
 var isHeader4:boolean=$derived(/^####[^#]/.test(title));
 
-var randomTextColour:string=randomCustomColourHash(title);
-var randomHeaderBgColour:string=randomCustomColourHash(title+"bg");
+var randomTextColour:string=$derived(randomCustomColourHash(title,1));
+
+// headers get random colour bg
+var randomHeaderBgColour:string=$derived.by(()=>{
+    if (isHeader1 || isHeader2 || isHeader3 || isHeader4)
+    {
+        return randomCustomColourHash(title+"bg",.47);
+    }
+
+    return "transparent";
+});
 
 /** clicked play button. call play click event */
 function onPlayClick():void
@@ -164,7 +173,8 @@ function onKey(e:KeyboardEvent):void
     <div class="title">
         <input type="text" value={title} class="hover-fade-input" onchange={onTitleChange2}
             class:edited={edited} onkeydown={onKey} class:header1={isHeader1} class:header2={isHeader2}
-            class:header3={isHeader3} class:header4={isHeader4} style:color={randomTextColour}/>
+            class:header3={isHeader3} class:header4={isHeader4} style:color={randomTextColour}
+            style:background={randomHeaderBgColour}/>
     </div>
 
     <div class="time-range">
