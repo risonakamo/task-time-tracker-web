@@ -228,6 +228,42 @@ function genEditedTimesDict():void
     rowTimes=newDict;
 }
 
+/** get the task that should be redone: either the current task (if one is running),
+ *  or the most recent completed task */
+function getLastDoneTask():TimeEntry|null
+{
+    // If there's a current task running, return that
+    if (tttState.currentTaskValid)
+    {
+        return tttState.currentTask;
+    }
+
+    // Otherwise, return the first completed task
+    if (!tttState.allTasks || tttState.allTasks.length===0)
+    {
+        return null;
+    }
+
+    const firstTask=tttState.allTasks[0];
+
+    if (firstTask.timeEnd>0)
+    {
+        return firstTask;
+    }
+
+    return null;
+}
+
+/** do close program */
+function doExitProgram():void
+{
+    closeProgram();
+
+    setTimeout(()=>{
+        window.close();
+    },1000);
+}
+
 /** clicked start button. send start task request with the contents of the task field,
  *  after cleaning it. doesn't work if empty. clears the task entry field afterward */
 function onClickStart():void
@@ -367,6 +403,15 @@ function onGlobalKeyInput(e: KeyboardEvent): void {
         }
     }
 
+    // alt+q: exit program
+    else if (e.key==="q" && e.altKey)
+    {
+        e.preventDefault();
+        e.stopPropagation();
+        doExitProgram();
+        return;
+    }
+
     // // if press space while input is not focused, focus the input
     // else if (e.key==" " && !taskAdderElement.inputIsFocused())
     // {
@@ -385,37 +430,7 @@ function onDataDirOpen():void
 /** clicked close button */
 function onClose():void
 {
-    closeProgram();
-
-    setTimeout(()=>{
-        window.close();
-    },1000);
-}
-
-/** get the task that should be redone: either the current task (if one is running),
- *  or the most recent completed task */
-function getLastDoneTask():TimeEntry|null
-{
-    // If there's a current task running, return that
-    if (tttState.currentTaskValid)
-    {
-        return tttState.currentTask;
-    }
-
-    // Otherwise, return the first completed task
-    if (!tttState.allTasks || tttState.allTasks.length===0)
-    {
-        return null;
-    }
-
-    const firstTask=tttState.allTasks[0];
-
-    if (firstTask.timeEnd>0)
-    {
-        return firstTask;
-    }
-
-    return null;
+    doExitProgram();
 }
 
 /** clicked redo button. start the last done task. if there is a current task running,
