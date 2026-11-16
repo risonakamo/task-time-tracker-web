@@ -90,7 +90,15 @@ var isHeader2:boolean=$derived(/^##[^#]/.test(title));
 var isHeader3:boolean=$derived(/^###[^#]/.test(title));
 var isHeader4:boolean=$derived(/^####[^#]/.test(title));
 
-var randomTextColour:string=$derived(randomCustomColourHash(title,1));
+// if ongoing, dont use random colour
+var randomTextColour:string=$derived.by(()=>{
+    if (isOngoing)
+    {
+        return "inherit";
+    }
+
+    return randomCustomColourHash(title,1);
+});
 
 // headers get random colour bg
 var randomHeaderBgColour:string=$derived.by(()=>{
